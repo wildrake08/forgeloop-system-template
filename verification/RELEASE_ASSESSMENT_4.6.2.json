@@ -1,7 +1,7 @@
 {
   "evidence": {
-    "assessed_at": 1792302448,
-    "claim_boundary": "GitHub template scaffold; digest-bound template adoption; immutable GitHub Action references; repository rulesets remain external controls; general assurance kernel; composable lifecycle profiles; replaceable evidence adapters; minimal-viability intake; profile-derived required facts; safe reversible defaults; non-authoritative baseline proposal; explicit product baseline authorization; execution-evidence assumption replacement; cycle closed monitoring active status; trial transcripts in authorization packets; actionable external-agent failures; allowlisted local development artifacts; two distinct passing production outcome periods; silence never authorizes; thin guided operator journey; plain-language lifecycle status; consolidated authorization review packet with separate exact decisions; three guided onboarding templates; digest-bound read-only environment discovery; secret values never collected; explicit discovery acceptance; loopback-only visual operator; CSRF-protected browser mutations; exact authority challenges preserved; six preconfigured production adapter families; externally signed production observations; external public-key trust anchors; exact system, environment, artifact, evidence-type, and freshness binding; composable software quality profile; nine quality dimensions and eighteen measurable criteria; composable UX engineering profile; ten UX dimensions and twenty-one measurable criteria; population-, journey-, context-, sample-, instrument-, and evidence-bound UX assessment; human-approved research ethics; authority-declared thresholds with no consequential defaults; governed quality tradeoffs; change-triggered quality and UX reassessment; outcomes achieved and sustained; baseline and counterfactual; costs and harms; independent continuation authority; conversational facilitation with local bearer session tokens; deterministic routing and optional external advisory facilitator protocol; external subprocess engineering-agent protocol; CPython local execution; local HMAC runtime identities; RSA-SHA256 release assessment with embedded, not externally trusted, release-assessment public key; unittest build; simulated local deployment; synthetic controlled point-of-sale demonstration; externally supplied production trust anchor; criterion-specific production evidence; authentic target-environment adapters required; time-bounded target-system verdict; no universal or permanent production claim; no universal quality or UX certification; no OS sandbox guarantee; no production identity-provider guarantee",
+    "assessed_at": 1792343312,
+    "claim_boundary": "GitHub template scaffold; digest-bound template adoption; immutable GitHub Action references; repository rulesets remain external controls; general assurance kernel; composable lifecycle profiles; replaceable evidence adapters; minimal-viability intake; profile-derived required facts; safe reversible defaults; non-authoritative baseline proposal; explicit product baseline authorization; executable product-baseline binding; enforced rejection rationale and revision; revocable bearer sessions and mandates; non-reflective sensitive-input constraint; execution-evidence assumption replacement; cycle closed monitoring active status; trial transcripts in authorization packets; actionable external-agent failures; allowlisted local development artifacts; two distinct passing production outcome periods; silence never authorizes; thin guided operator journey; plain-language lifecycle status; consolidated authorization review packet with separate exact decisions; three guided onboarding templates; digest-bound read-only environment discovery; secret values never collected; explicit discovery acceptance; loopback-only visual operator; CSRF-protected browser mutations; exact authority challenges preserved; six preconfigured production adapter families; externally signed production observations; external public-key trust anchors; exact system, environment, artifact, evidence-type, and freshness binding; composable software quality profile; nine quality dimensions and eighteen measurable criteria; composable UX engineering profile; ten UX dimensions and twenty-one measurable criteria; population-, journey-, context-, sample-, instrument-, and evidence-bound UX assessment; human-approved research ethics; authority-declared thresholds with no consequential defaults; governed quality tradeoffs; change-triggered quality and UX reassessment; outcomes achieved and sustained; baseline and counterfactual; costs and harms; independent continuation authority; conversational facilitation with local bearer session tokens; deterministic routing and optional external advisory facilitator protocol; external subprocess engineering-agent protocol; CPython local execution; local HMAC runtime identities; RSA-SHA256 release assessment with embedded, not externally trusted, release-assessment public key; unittest build; simulated local deployment; synthetic controlled point-of-sale demonstration; externally supplied production trust anchor; criterion-specific production evidence; authentic target-environment adapters required; time-bounded target-system verdict; no universal or permanent production claim; no universal quality or UX certification; no OS sandbox guarantee; no production identity-provider guarantee",
     "dimensions": {
       "adaptability": true,
       "effectiveness": true,
@@ -64,9 +64,9 @@
         "size": 1838
       },
       {
-        "path": "CONFORMANCE_REPORT_4.6.1.md",
-        "sha256": "98167c59707bea7853c6fdaa98a3430012f6164c48cacdce70d0e429665b3291",
-        "size": 11471
+        "path": "CONFORMANCE_REPORT_4.6.2.md",
+        "sha256": "699a3a650e852b56dc23f2f11815d1dffc27fcf974ec5bb14dbfa3e02aeb89b2",
+        "size": 12174
       },
       {
         "path": "CONTRIBUTING.md",
@@ -75,7 +75,7 @@
       },
       {
         "path": "COPILOT_GUIDE.md",
-        "sha256": "f292a839f03794d52ecb25354c751fecf0d170f5bfb9051850d33eae975c5cc5",
+        "sha256": "31a5493dc37213c5b3ec1abbaf025e1e7bfcbb88cd701fcb6c9babe8b770d93c",
         "size": 3413
       },
       {
@@ -105,8 +105,8 @@
       },
       {
         "path": "NORMATIVE.md",
-        "sha256": "96ef0acef66df5ab114fb15bc38800d08fe2ba37fbb3edadc502c4f50a10b8ac",
-        "size": 8238
+        "sha256": "8c8a55980986a840371beafad5f3a937b0bedb9fd630d529b16bdfb24645625a",
+        "size": 9610
       },
       {
         "path": "ONBOARDING_AND_VISUAL_OPERATOR.md",
@@ -115,8 +115,8 @@
       },
       {
         "path": "OPERATOR_GUIDE.md",
-        "sha256": "976ab1083b1b301bfa19634aa4ee9a9c125db2eaf0611a5ebabc09805eeb58f5",
-        "size": 5719
+        "sha256": "c53bf8378ec04a0dc5d1d661d8fb7e892ae20601044c1ee68c8717926315cbdc",
+        "size": 6387
       },
       {
         "path": "OUTCOME_ASSURANCE.md",
@@ -135,8 +135,8 @@
       },
       {
         "path": "README.md",
-        "sha256": "05804d832219f45605e2fda1160144cde9b02ceef86fed2a9de8c41b23eed342",
-        "size": 13154
+        "sha256": "211358df86bd5579c22e3486f230c6178ff2eadae3ea516e8be8347591bf1a2c",
+        "size": 13665
       },
       {
         "path": "SECURITY.md",
@@ -155,12 +155,12 @@
       },
       {
         "path": "build.py",
-        "sha256": "37714897c4caf51d32270887736770302e2bfbe3c5282975ca8bd6223d16d0e3",
+        "sha256": "9c0d0a120ef60b803a8a8f1063591d615fcb2bf95a76f3ac43d47c6ad9da2615",
         "size": 533
       },
       {
         "path": "clses_mvas_v1/__init__.py",
-        "sha256": "e3db303b5c6fee39150134562d6073ae5699c85d7924cb96310ee3db1916b136",
+        "sha256": "6ed439ecb3f85c6aa7627b7764d32c7eb15bf096e37091c144b281e67e85f4c2",
         "size": 22
       },
       {
@@ -180,8 +180,8 @@
       },
       {
         "path": "clses_mvas_v1/autonomy.py",
-        "sha256": "5526fe31add59313c1ec0006b830c1d4f81cad5310e723f0a9049083d33d5613",
-        "size": 10622
+        "sha256": "e0e1ae19fcdee6654c778c242f0ba96d0c9717f2ff89117921be958ca7822bef",
+        "size": 11531
       },
       {
         "path": "clses_mvas_v1/cli.py",
@@ -190,13 +190,13 @@
       },
       {
         "path": "clses_mvas_v1/copilot.py",
-        "sha256": "ec835429e618bded0643db91a9781c63924a3b8458b4895a0f667960af1499ef",
-        "size": 20039
+        "sha256": "99d3ed10ec6abc864b6eb299e3775e42c0ad0ec041d49f434da0d4908d809bec",
+        "size": 21876
       },
       {
         "path": "clses_mvas_v1/copilot_cli.py",
-        "sha256": "f0949fdba6e131cfcce90106e995a5f3aae0e43b680fdea0bec5c8c2abc3c5ce",
-        "size": 3883
+        "sha256": "9058cfa85a5a8f2bee9196cb7623f377cb33820f89a456818be9814bc94a7d49",
+        "size": 4151
       },
       {
         "path": "clses_mvas_v1/discovery.py",
@@ -205,13 +205,13 @@
       },
       {
         "path": "clses_mvas_v1/engine.py",
-        "sha256": "36536d303e9384f695d71e214d83596b4475780a58080109ec70ab6b54a1840f",
-        "size": 30280
+        "sha256": "9a94d02f54efa07c90af18f8e2219ac516e553917b076b78c9d5b33fe57e9a20",
+        "size": 37206
       },
       {
         "path": "clses_mvas_v1/guided_operator.py",
-        "sha256": "e27a1d0789525372ffac148ab90422a02dd05545aeec88adf4b9763369ba06fb",
-        "size": 21726
+        "sha256": "93ed57fa095c10ca88520fd58d20ba6d7ceda740df5b4b728e7b4c7d694f85c5",
+        "size": 23425
       },
       {
         "path": "clses_mvas_v1/intake.py",
@@ -240,8 +240,8 @@
       },
       {
         "path": "clses_mvas_v1/operator_cli.py",
-        "sha256": "9b74d97d7341b6d16d18a7600c888c8a97d99e905fe9d886aabbd22515237f20",
-        "size": 7477
+        "sha256": "e916f38e36f34060f85ea1548a1407418d7fd02b2b34b75f12dd5e1cec66f6a8",
+        "size": 8473
       },
       {
         "path": "clses_mvas_v1/operator_ui/app.css",
@@ -260,8 +260,8 @@
       },
       {
         "path": "clses_mvas_v1/policy.py",
-        "sha256": "78b9ff90160a161aa3f3ef0c01a44a16ed4b0b2989b17a748d9a5dd2299dcac7",
-        "size": 1981
+        "sha256": "83d58a99f1a6603f6dc41b6e03c0d72f3e062a2f9deaa435fbf30a847c5d5ff8",
+        "size": 2621
       },
       {
         "path": "clses_mvas_v1/production.py",
@@ -315,8 +315,8 @@
       },
       {
         "path": "clses_mvas_v1/release_assessment.py",
-        "sha256": "599484ac1ab2d824be5948e763c88542b752b67ad6d0cfb4ec8f51bf7b4c3a17",
-        "size": 20675
+        "sha256": "74ddc2a8a9db8eb4688f11841af017b733d37b623897b9b2bcb01986a5317143",
+        "size": 21117
       },
       {
         "path": "clses_mvas_v1/schemas/adapter-manifest.schema.json",
@@ -410,8 +410,8 @@
       },
       {
         "path": "clses_mvas_v1/schemas/minimal-viable-baseline.schema.json",
-        "sha256": "2bf932962d4298e7243847651b0c0573171e6ffbee37a83bbc9b163aaedea6c2",
-        "size": 1324
+        "sha256": "0ccb221ccd1b0a71c9d7ecd18e1749f582f4b8643340a391d816356fed9667ac",
+        "size": 1513
       },
       {
         "path": "clses_mvas_v1/schemas/onboarding-plan.schema.json",
@@ -450,7 +450,7 @@
       },
       {
         "path": "clses_mvas_v1/template_edition.py",
-        "sha256": "bb659f106d1dd44d2a65a887a058ff797fcc1dc118ceb6e6e9d33f1de2399222",
+        "sha256": "34cc7cbd0aea1945e1353559fb54c535db2d7a179867088ddc57b05aea157f0a",
         "size": 6048
       },
       {
@@ -465,8 +465,8 @@
       },
       {
         "path": "clses_mvas_v1/visual_operator.py",
-        "sha256": "51409877d0eadbac66f92da07f4fde9a2d82b89aae0fc085ef1c46f6a94e841b",
-        "size": 6822
+        "sha256": "c066bdfd593f42b3e46d070d34e4d02346d72968fbb03c1b558e660a53323305",
+        "size": 6845
       },
       {
         "path": "examples/synthetic-valid.json",
@@ -475,8 +475,8 @@
       },
       {
         "path": "independent_verify.py",
-        "sha256": "ef7ad1889ff757a31338498ba45fe46f9108217ef6df5071923bedd5b8c837ff",
-        "size": 4309
+        "sha256": "25b991b8b814d5a0d3a8df4c81afe6e638d58644df9eaf60910cbca902924e26",
+        "size": 4589
       },
       {
         "path": "kernel_tests/__init__.py",
@@ -490,8 +490,8 @@
       },
       {
         "path": "kernel_tests/test_assessment_policy.py",
-        "sha256": "5c3faf10c3e1b9ac91d8fbbe3b6abdba8c2b9bee035ae09373349c2942e29b3e",
-        "size": 1796
+        "sha256": "27e025af74192fe331f251cff6470e5dd9bab69ebdfaf1ff87729bb2a5413a62",
+        "size": 2417
       },
       {
         "path": "kernel_tests/test_assurance.py",
@@ -500,8 +500,8 @@
       },
       {
         "path": "kernel_tests/test_autonomy.py",
-        "sha256": "4bafaf5f9730ea8cec5f5a6e34fee0ca5869ea4d3dc54b9ef2cfa987bee63607",
-        "size": 4814
+        "sha256": "f1e195330332fcbc413920df048f5b6bdb2536dd5312648c9c08e4972b10bd43",
+        "size": 5180
       },
       {
         "path": "kernel_tests/test_cli.py",
@@ -510,8 +510,8 @@
       },
       {
         "path": "kernel_tests/test_copilot.py",
-        "sha256": "93e4bbc58ff5eb4733fe42830031e8ad260e441030309b3eb4407bb449e32cfb",
-        "size": 6787
+        "sha256": "85cfdcf03dc2ddce602cb0bd68036f357899c541ca2a94605e4bff6292cb7ec3",
+        "size": 7105
       },
       {
         "path": "kernel_tests/test_copilot_cli.py",
@@ -530,8 +530,8 @@
       },
       {
         "path": "kernel_tests/test_guided_operator.py",
-        "sha256": "2ae429bc8ef24d994c4224c8563c7fa7271535bf105d0fefa81a52a8526b87ec",
-        "size": 9658
+        "sha256": "73f948cf8ffcfa78ab26a1ce2fc7152057a55be5db5e243f1898e8bef4027dc3",
+        "size": 11815
       },
       {
         "path": "kernel_tests/test_intake.py",
@@ -620,13 +620,13 @@
       },
       {
         "path": "pyproject.toml",
-        "sha256": "ad30cda8bf8bd7c5555462538a42820caffb5ea7d309425a0fb5373d4e1a6c2d",
+        "sha256": "c5d49b6aee56318e46d482082b007bacb47993a7888695ce0d5701b10ec75bdc",
         "size": 1246
       },
       {
         "path": "requirements-ci.lock",
-        "sha256": "08fb14e9fa6b1f3133f72b986f5f612e7245f7a79f650ecd0f715fe067965081",
-        "size": 605
+        "sha256": "6935c1d9db6af8a52440d78ca848374d26f222fe1bf1dab7be25e78f7c85e6ea",
+        "size": 22042
       },
       {
         "path": "scripts/bootstrap.py",
@@ -644,12 +644,17 @@
         "size": 261
       },
       {
-        "path": "verification/ASSESSMENT_POLICY_4.6.1.json",
-        "sha256": "9db6d63752c27ed827e55b42a6ad7f2a240f120edd0479afcefccd99296d5a91",
-        "size": 3893
+        "path": "uv.lock",
+        "sha256": "956d5032457f05feb7f395f032c211493c368d1cfc82b12b5402e8fdadc6b02b",
+        "size": 83797
+      },
+      {
+        "path": "verification/ASSESSMENT_POLICY_4.6.2.json",
+        "sha256": "ab266288ae61f9bdb01d6b6a7a24429cc0154e7a03b198d6697d76ae54e42fb3",
+        "size": 4064
       }
     ],
-    "inventory_sha256": "c8108344aa9fc04f6555268ed24e0049c92dbc5665e75390d074d13c67e0d743",
+    "inventory_sha256": "262da9ecbf7a6e0d3aef7769d2f895b1843e3163fafb6b96090f3d99a5dade4c",
     "manifest": {
       "artifacts": [
         {
@@ -662,7 +667,7 @@
             "context": "{\"assessment_horizon\": \"one controlled cycle\", \"deployment\": \"local_simulation\", \"observation\": \"service --self-test\", \"runtime\": \"CPython >=3.10\"}",
             "horizon": {
               "end": 4102444800,
-              "start": 1792302447
+              "start": 1792343311
             },
             "outcomes": [
               {
@@ -753,13 +758,13 @@
           "id": "engineering-grant",
           "payload": {
             "actor": "engineering-reviewer",
-            "authority_source": "signed-record:d1919c3bfbabf6176ab56a540a615fb6894bc41ab41416c72520325bbaab996f",
+            "authority_source": "signed-record:b1b00f6e949d33e8c701f54a60a51f172f089867245a847fe9f61c68edda07d9",
             "authorized_actor": "agent",
             "basis_refs": [],
-            "decided_at": 1792302448,
+            "decided_at": 1792343312,
             "decision": "approved",
             "decision_kind": "engineering_authorization",
-            "scope": "build:7e87d9dbeb1920ebaa8468fcffd23f71aeacb37fdc06fb74dd612d1740bd77e9",
+            "scope": "build:0e1776321ed1c5fb5f41d7a42e5ca7a54c4c7dc70530f3d6b18cd009b158f2d7",
             "target_ref": null,
             "valid_until": 4102444800
           },
@@ -783,8 +788,8 @@
             },
             "execution_evidence_refs": [],
             "instruction": "Build and test the exact governed change set",
-            "state_changed_at": 1792302448,
-            "work_id": "build:7e87d9dbeb1920ebaa8468fcffd23f71aeacb37fdc06fb74dd612d1740bd77e9",
+            "state_changed_at": 1792343312,
+            "work_id": "build:0e1776321ed1c5fb5f41d7a42e5ca7a54c4c7dc70530f3d6b18cd009b158f2d7",
             "work_state": "authorized"
           },
           "references": [
@@ -809,7 +814,7 @@
             "authority_source": "signed-record:c07f23840ff240fec99e41e162e512d98e34159b728091b298c814004a0b4fb6",
             "authorized_actor": null,
             "basis_refs": [],
-            "decided_at": 1792302448,
+            "decided_at": 1792343312,
             "decision": "approved",
             "decision_kind": "production_authorization",
             "scope": "deploy:c07f23840ff240fec99e41e162e512d98e34159b728091b298c814004a0b4fb6",
@@ -828,7 +833,7 @@
             "build_digest": "sha256:c07f23840ff240fec99e41e162e512d98e34159b728091b298c814004a0b4fb6",
             "configuration_digest": "sha256:4678b5fbddd557371a5d2958b16e66155a8e0c2977266127677b0bc6b0268d1e",
             "deployment": {
-              "deployed_at": 1792302448,
+              "deployed_at": 1792343312,
               "environment": "local_simulation",
               "production_authorization_ref": {
                 "id": "production-grant",
@@ -904,13 +909,13 @@
               "id": "method-test_pass_rate",
               "version": 1
             },
-            "observed_at": 1792302448,
+            "observed_at": 1792343312,
             "source_ids": [
-              "record-3a75df9a9246a8c7"
+              "record-5a7e1b920cd769ef"
             ],
             "source_provenance": [
-              "record-3a75df9a9246a8c7",
-              "3a75df9a9246a8c7ed27d870c07f31a7f5b0227fae8288ad4dabe82e6a17a2d3"
+              "record-5a7e1b920cd769ef",
+              "5a7e1b920cd769ef0489a0ff3d1595fd3c42f571be58735567a2fbc8c59b6bec"
             ],
             "target_ref": {
               "id": "implementation",
@@ -975,13 +980,13 @@
               "id": "method-health_rate",
               "version": 1
             },
-            "observed_at": 1792302448,
+            "observed_at": 1792343312,
             "source_ids": [
-              "record-c95efa66cc0069ff"
+              "record-119b244934bf6cc7"
             ],
             "source_provenance": [
-              "record-c95efa66cc0069ff",
-              "c95efa66cc0069ffce5587a07ceee11ec40b294dd04197d4ac4d4e1f25afb6d5"
+              "record-119b244934bf6cc7",
+              "119b244934bf6cc72991c1fe89d7aee6b1639b242369a82e2527c2d550fa9298"
             ],
             "target_ref": {
               "id": "implementation",
@@ -1004,17 +1009,17 @@
           "version": 1
         }
       ],
-      "assessed_at": 1792302448,
+      "assessed_at": 1792343312,
       "spec_version": "0.3.1",
       "system_id": "release-subject"
     },
-    "manifest_sha256": "63037d73fc6d46175c3c7207a8d2294d06927478e7f6a709d2ec666f35628f1e",
+    "manifest_sha256": "ccbe370b85b292b99c9afaeba8c092a4963bc72f9020ad3e80fe355320ceb78d",
     "parts": {
       "adapter_protocol": {
         "evidence": {
           "pass": true,
           "tests": 5,
-          "transcript_sha256": "0351cbf120b1783042eec02d2e004386c71ccfa2c7b78ff3c87bcfad4910c336"
+          "transcript_sha256": "7659cfb9f74aa016db844c286fb202739f4a03cfe4c676201658695aa4d6ff6c"
         },
         "files": [
           "clses_mvas_v1/adapters.py",
@@ -1027,7 +1032,7 @@
         "evidence": {
           "pass": true,
           "tests": 19,
-          "transcript_sha256": "ed473146c11470eb9830fed5f4940c98d20c111805a199904af78fd94ed5ae11"
+          "transcript_sha256": "33f59d07f86f77e8299bf2088eeaa476a0ed1ad337b575fab0d6b75aa384e278"
         },
         "files": [
           "clses_mvas_v1/assurance.py",
@@ -1039,8 +1044,8 @@
       "autonomous_orchestrator": {
         "evidence": {
           "pass": true,
-          "tests": 10,
-          "transcript_sha256": "030068a7537c3a235c2fbc1bfb2bc378e1060f1db0c7391279c7c3d03f35931c"
+          "tests": 11,
+          "transcript_sha256": "afa8dae770ac7f5fc39946c734388ba409a1fc886f4e7ececfe66cd8e672b677"
         },
         "files": [
           "clses_mvas_v1/autonomy.py"
@@ -1052,7 +1057,7 @@
         "evidence": {
           "pass": true,
           "tests": 18,
-          "transcript_sha256": "dd6394fd7f88b78a38d099e61e8299f9f45a047d3e2c5d8b5cc0a72e9da1f5b0"
+          "transcript_sha256": "9066c589fdb09d71bf9213f29926779290c5fef994b839d1f69c5caa7abc1a14"
         },
         "files": [
           "clses_mvas_v1/policy.py"
@@ -1064,7 +1069,7 @@
         "evidence": {
           "pass": true,
           "tests": 18,
-          "transcript_sha256": "dd6394fd7f88b78a38d099e61e8299f9f45a047d3e2c5d8b5cc0a72e9da1f5b0"
+          "transcript_sha256": "9066c589fdb09d71bf9213f29926779290c5fef994b839d1f69c5caa7abc1a14"
         },
         "files": [
           "clses_mvas_v1/engine.py"
@@ -1076,7 +1081,7 @@
         "evidence": {
           "pass": true,
           "tests": 49,
-          "transcript_sha256": "5411d449f9e3b2e7080d1d47bdacc46f5a99994044c6d99f02abaedeef140ba1"
+          "transcript_sha256": "dd38771ba7d7366807624b1a8293cc29ec79ee383feea699d359008bce19a239"
         },
         "files": [
           "clses_mvas_v1/cli.py",
@@ -1096,7 +1101,7 @@
         "evidence": {
           "pass": true,
           "tests": 43,
-          "transcript_sha256": "f7eece880168911904243da5ac3207626f188258bf7ce1964b9f52a4946ce49f"
+          "transcript_sha256": "322f8364def49fce972db57127473c217f2c2216c91b9281b9ac4899b3940f40"
         },
         "files": [
           "clses_mvas_v1/validator.py",
@@ -1109,7 +1114,7 @@
         "evidence": {
           "pass": true,
           "tests": 10,
-          "transcript_sha256": "6caf87794b95144738f334f768a40388bef1651dee1bd22714612f564191cfad"
+          "transcript_sha256": "b07a10bfcbf63d136b0425cff201f5e98e2980dd93505178fadeb6e7e6d46513"
         },
         "files": [
           "clses_mvas_v1/template_edition.py",
@@ -1178,8 +1183,8 @@
       "guided_operator_layer": {
         "evidence": {
           "pass": true,
-          "tests": 17,
-          "transcript_sha256": "ba7344c661d4602eb39a8c8621b21f6df4c5344809f6e9a293f4fbd69feff4e9"
+          "tests": 18,
+          "transcript_sha256": "a263a048b45d54f6d02438839a3f6c69c676acb3f4e47160390e2cb53a081359"
         },
         "files": [
           "clses_mvas_v1/guided_operator.py",
@@ -1196,8 +1201,8 @@
       "lifecycle_copilot": {
         "evidence": {
           "pass": true,
-          "tests": 15,
-          "transcript_sha256": "3278f0febf546d1c1a8900be8994b14fb30322f9fd52acb2419e0230bb8b5727"
+          "tests": 16,
+          "transcript_sha256": "d7e31bcbd43f67844f96152071c8557b4f7101c87906f63460df6886cb9268c7"
         },
         "files": [
           "clses_mvas_v1/copilot.py",
@@ -1211,7 +1216,7 @@
         "evidence": {
           "pass": true,
           "tests": 19,
-          "transcript_sha256": "ed473146c11470eb9830fed5f4940c98d20c111805a199904af78fd94ed5ae11"
+          "transcript_sha256": "33f59d07f86f77e8299bf2088eeaa476a0ed1ad337b575fab0d6b75aa384e278"
         },
         "files": [
           "clses_mvas_v1/profiles",
@@ -1228,7 +1233,7 @@
               "iterations": 1,
               "phase": "build",
               "required_scopes": [
-                "build:7e87d9dbeb1920ebaa8468fcffd23f71aeacb37fdc06fb74dd612d1740bd77e9"
+                "build:0e1776321ed1c5fb5f41d7a42e5ca7a54c4c7dc70530f3d6b18cd009b158f2d7"
               ],
               "run_id": "assessment-run",
               "state": "awaiting_non_autonomous_authority"
@@ -1276,7 +1281,7 @@
         "evidence": {
           "pass": true,
           "tests": 18,
-          "transcript_sha256": "eed4439d2124216e592b8f0f46514541191473af56bdb90468905b4bc74ae285"
+          "transcript_sha256": "0a6b15d871c054cab6d964f6013e475875e7a72e671d348c6e05b7b8229c9294"
         },
         "files": [
           "clses_mvas_v1/intake.py",
@@ -1293,7 +1298,7 @@
         "evidence": {
           "pass": true,
           "tests": 1,
-          "transcript_sha256": "bb2e58431c0da1fa2a2c255e6407aa8703f990184c93eb9d4bc397d63b8e5a5e"
+          "transcript_sha256": "21049d009604dbb4237c49b79cf862f960eb2e0bff0f95152641b522d1053c65"
         },
         "files": [
           "clses_mvas_v1/schemas"
@@ -1305,7 +1310,7 @@
         "evidence": {
           "pass": true,
           "tests": 10,
-          "transcript_sha256": "4f9df12f897eecfe236f4a0175b197c4a8c5e29898a8c51298fc93e044f80cd1"
+          "transcript_sha256": "a3e0970284bca2a83ad0d09c76b4bba824fbd77294047ad505f24f26c1c73ea3"
         },
         "files": [
           "clses_mvas_v1/production_adapters.py",
@@ -1321,7 +1326,7 @@
         "evidence": {
           "pass": true,
           "tests": 16,
-          "transcript_sha256": "e2065ab7762d4a30c192ebc464e42881a937c0ec02b52121319248834354bae2"
+          "transcript_sha256": "2f0bcdb21fa1b0adb5d5b4b7a8c3ddab73d5fbcd85cf2db80982fbb188070aac"
         },
         "files": [
           "clses_mvas_v1/production.py",
@@ -1335,7 +1340,7 @@
         "evidence": {
           "pass": true,
           "tests": 19,
-          "transcript_sha256": "ed473146c11470eb9830fed5f4940c98d20c111805a199904af78fd94ed5ae11"
+          "transcript_sha256": "33f59d07f86f77e8299bf2088eeaa476a0ed1ad337b575fab0d6b75aa384e278"
         },
         "files": [
           "clses_mvas_v1/assurance.py",
@@ -1349,14 +1354,14 @@
       "release_assessment": {
         "evidence": {
           "pass": true,
-          "tests": 230,
-          "transcript_sha256": "4c7ac522f6f90e970f023c0c48122f5cfcd4123cecf015ce9ae9a4099cf73689"
+          "tests": 234,
+          "transcript_sha256": "7d406c6bbc2e3e8bea043ef51f69ca35120d44e7c76b417bd945b5f543afe9f4"
         },
         "files": [
           "clses_mvas_v1/release_assessment.py",
           "independent_verify.py",
           "build.py",
-          "verification/ASSESSMENT_POLICY_4.6.1.json"
+          "verification/ASSESSMENT_POLICY_4.6.2.json"
         ],
         "intrinsic": "conformant",
         "relational": "adequate_for_declared_part_conditions"
@@ -1365,7 +1370,7 @@
         "evidence": {
           "pass": true,
           "tests": 4,
-          "transcript_sha256": "48a1e4f6cdfe05339a6380c5208ae50847d8fda14a7866d5baae332ac5da8d3e"
+          "transcript_sha256": "e02b8364847d03b4b930297fb58dabff22acc5d2628ab5265c2bb5e4ab58c225"
         },
         "files": [
           "clses_mvas_v1/store.py"
@@ -1377,7 +1382,7 @@
         "evidence": {
           "pass": true,
           "tests": 15,
-          "transcript_sha256": "158a4a12a8e77e175c4300a69557e69975ded46b60f72c5c181537f0df032c57"
+          "transcript_sha256": "36b9f91231ed579aaf2763f8da27cf91a47af434b71a97a6945269d35652b705"
         },
         "files": [
           "clses_mvas_v1/quality.py",
@@ -1396,7 +1401,7 @@
         "evidence": {
           "pass": true,
           "tests": 12,
-          "transcript_sha256": "198cb512be54c92bc32ed96e87caa3377f0a43b0eb5fcf9a054b932616021230"
+          "transcript_sha256": "e28a07581715a7e4e62b42ad49333dae63a6fb07e742c0b2bb9781821de9a8c2"
         },
         "files": [
           "clses_mvas_v1/ux.py",
@@ -1414,7 +1419,7 @@
         "evidence": {
           "pass": true,
           "tests": 5,
-          "transcript_sha256": "a3474509471b7078357be779b05d481415da39b393dd62ce596fceabe80a10e6"
+          "transcript_sha256": "9f8b8ac6fc9a3845f804910ed0899ea7341bed8ed65698df5b1ca24a24516bf2"
         },
         "files": [
           "clses_mvas_v1/visual_operator.py",
@@ -1426,14 +1431,14 @@
         "relational": "adequate_for_declared_part_conditions"
       }
     },
-    "policy_sha256": "959b8d54f5438a807d6ebd29ffc2f2f0f06d5f0784f447ebf64faaeec7a32232",
-    "started_at": 1792302432,
+    "policy_sha256": "b6a5ce25270c793f527352266d0e374ff0d9131cbca9b327ecf1b88a04d21d9f",
+    "started_at": 1792343299,
     "tests": {
       "pass": true,
-      "tests": 230,
-      "transcript_sha256": "4c7ac522f6f90e970f023c0c48122f5cfcd4123cecf015ce9ae9a4099cf73689"
+      "tests": 234,
+      "transcript_sha256": "7d406c6bbc2e3e8bea043ef51f69ca35120d44e7c76b417bd945b5f543afe9f4"
     },
-    "version": "4.6.1",
+    "version": "4.6.2",
     "whole": {
       "intrinsic": "conformant",
       "live_cycle_valid": true,
@@ -1441,10 +1446,10 @@
       "relational": "purpose_sustaining_general_assurance_framework_adequate"
     }
   },
-  "evidence_sha256": "2bf28c8a63c192994fcbf2dbdbfd4c8c03f0ede926325f23a0fea6f694f33a26",
+  "evidence_sha256": "d839776e54a81a1dc45c1977fd793d25843eaa0d2bfdc48794daa621bc3cf95a",
   "signer": {
     "algorithm": "RSA-SHA256",
-    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtG0xZdbe1sLspUkXGueR\nyne4sOAh/9yKMu3YSvt03SP34AVG0gWNmj/NSZfv9gvE2rRhkq+kPNlqtZkNtcHx\n78LYHaEwot+GpBSAy2/+TJA34Vcy2xDSVh3qCJO8+US/HW330PZY5D7Omf3tNB8R\ngNfLa4wdQMsFWxbXeWZQpi1MnKdjj4tT7UJ/ZrNXrGGg5libNgFIDWH4DTsLBzFl\nSbmmSXDocNawL07FdBjUC707qryE3Yyy+XCgQcYsAHvBcviR2zA3eJ0BYtAFomrS\n1+C14hQL+0xUfr+nB2u9mo900i/3672FZDSGl8ntevl1jqsBfO97fsYY4AYx3ZXs\nuwIDAQAB\n-----END PUBLIC KEY-----\n",
-    "signature_base64": "rK88/bcpmdgM1rglFExxcCRtEHHZZ5+FrIVpIoZZq/OzV+eQOdYMpr2PA7klTi3hi4q84A2akddFkYVtQBlap5bN8C332rAE/4iLRXPCrH/qMI6Epfpcz1f+Om8xGhkYBDWvWhskMjvNM+cDD0biZrws63fisbAYlAVhQyqH1gRobSxova69pjJ35dCvO4ZIaxMyMJYXf2ESbhCXaNx+74kU8u3lT4ksVWhVS06xcktXqSF6XLGNEHM0vWmmzC2bQuuGfg7NrsVMQSe0M0MoFVrkZOenIzqC6qc032NhQHV5vKPy1TiRk7WTBxzjCaNo0iLkiOIRnbelDPEb6nUtCw=="
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwSnhr1tdzEYw4D4DuzUW\nanRdRRhRwAQtqQlOrZaGFYUUi5rxAzqNwL4/m75TLcoVXqWg1aj7VbKnp9+azpip\nsyJNOTIcqI50Qcf2Y+XMyRSjBRtVFfCFjajCeIxcj3awxrxm48zRwmGM2vPJ6Zqx\nuKed0x88Pcl4z0LLwRztPAG4FUvxH1W/BhGSd7D+iGRg9hhaqZYpZX8AwSzOyFyd\nsfqUdxFg5AsDcGWHGHLSwm2oOGmGdh9eeojqoVXJmxrgtXtLAgPf4hfmMKmz9LP9\nE/5KDrCxtra06iqTKflM/ebSpZqESbkhekdd7VtW42R85aqoMW3dlGvXcxpDnCNR\nYwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "signature_base64": "Lqe9HSELK2cI89j/GoCYSmuhhWZAgMGYodKipoE8yk9tUvGFqNtQSE4IUMRqk9/dhkHcmopBVrb1h5QAjgsNMXYVxtTfDpr5xGPy/apEh32HbNITQAc1Vq92yDqUA62tlv0bM9CfNhCGBt+FX5TNPucL5X08pOFr8oVLsa9YSCM7useXJjXH7Y+eoy1XOj+eMgnCToL0OcrB5Ddp+L7rdFoiOaMcZFRqnCQvez+i3A+qNK+QpbKY9TkVNcP7n5M4xDautv81oORdINDJCOtnm0SZ0KwrN/t0cmPgY9i0bKvwg4esIDcdocL9Ajim0Jj9j8RMku0bkuk6sOkvrSqBtw=="
   }
 }

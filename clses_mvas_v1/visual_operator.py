@@ -55,7 +55,7 @@ class VisualOperatorService:
         if method == "POST" and path == "/api/authorizations":
             return self._operator().prepare_authorizations(payload["session_id"], payload["token"], payload.get("evidence"))
         if method == "POST" and path == "/api/decide":
-            return self._operator().decide(payload["session_id"], payload["token"], payload["decision_id"], payload["outcome"], payload["confirmation"])
+            return self._operator().decide(payload["session_id"], payload["token"], payload["decision_id"], payload["outcome"], payload["confirmation"], payload.get("reason"))
         if method == "POST" and path == "/api/continue":
             return self._operator().continue_run(payload["session_id"], payload["token"], payload["run_id"])
         raise ValueError("unknown visual operator endpoint")

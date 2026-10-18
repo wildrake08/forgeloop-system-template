@@ -11,7 +11,7 @@ The copilot is a conversational facilitation layer over the authoritative CLSES 
 5. Approve or reject using the exact challenge. Ambiguous phrases have no effect.
 6. The control plane independently validates the principal, role, scope, lifecycle state, and non-replay status before applying an effect.
 
-Opening a session proves possession of the locally protected principal key. The resulting session token is a bearer secret and is displayed once. Version 4.6.1 demonstrates correct interaction semantics but does not provide production authentication; connect the same decision API to organizational identity, MFA, and externally managed signing keys before production use.
+Opening a session proves possession of the locally protected principal key. The resulting session token is a bearer secret and is displayed once. Version 4.6.2 demonstrates correct interaction semantics but does not provide production authentication; connect the same decision API to organizational identity, MFA, and externally managed signing keys before production use.
 
 Most people should use `clses-operator`, which presents these controls as one guided journey and groups actionable requests for review. `clses-copilot` remains the lower-level facilitation interface.
 

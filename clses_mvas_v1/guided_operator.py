@@ -102,6 +102,9 @@ class GuidedOperator:
     def open_session(self, principal, credential, ttl=3600):
         return self.copilot.open_session(principal, credential, ttl)
 
+    def close_session(self, session_id, token):
+        return self.copilot.close_session(session_id, token)
+
     def _pending_proposals(self):
         values = []
         folder = self.copilot.base / "decisions"
@@ -115,7 +118,7 @@ class GuidedOperator:
 
     @staticmethod
     def _baseline_scope(baseline):
-        excluded = {"decision", "authorization_digest", "authorized_at", "assumptions", "resolved_facts"}
+        excluded = {"decision", "authorization_digest", "authorized_at", "assumptions", "resolved_facts", "specification_digest", "binding_digest", "rejection"}
         return "baseline:" + digest({key: value for key, value in baseline.items() if key not in excluded})
 
     def _baseline_authorized(self, workflow=None):
@@ -125,8 +128,9 @@ class GuidedOperator:
             return False
         try:
             authorization = self.engine.policy.authorization(self._baseline_scope(baseline), "product", "system", "owner")
+            self.engine.verify_product_binding(baseline)
             return baseline.get("authorization_digest") == authorization[0]
-        except PermissionError:
+        except (PermissionError, FileNotFoundError, ValueError, KeyError):
             return False
 
     def _synchronize_execution_facts(self):
@@ -137,6 +141,8 @@ class GuidedOperator:
         if not runs or runs[-1]["phase"] not in ("awaiting_build", "awaiting_release", "complete"):
             return
         intake = workflow["intake"];baseline = intake["baseline"];now = int(time.time());changed = False
+        try:self.engine.verify_product_binding(baseline)
+        except (PermissionError, FileNotFoundError, ValueError, KeyError):return
         _, spec, spec_digest = self.engine._spec()
         values = {"architecture_status": "implemented_and_verified_against_current_specification"}
         components = spec.get("components", [])
@@ -176,7 +182,7 @@ class GuidedOperator:
         }
         requests = []
         for scope, item in sorted(expected.items()):
-            principal = "engineering-reviewer" if item["kind"] == "engineering" else "release-owner"
+            principal = {"product": "owner", "engineering": "engineering-reviewer", "release": "release-owner"}[item["kind"]]
             if self._is_authorized(scope, item):
                 state = "authorized"
             elif scope in by_scope:
@@ -229,6 +235,11 @@ class GuidedOperator:
             step = STEPS[0]
             summary = "I need " + str(intake["question_count"]) + " consolidated answer group(s) before I can prepare the baseline."
             next_action = {"action": "answer", "who": "product owner", "instruction": "Answer the displayed intake questions; answers remain non-authoritative."}
+            complete = 0
+        elif intake.get("baseline", {}).get("decision") == "rejected":
+            step = STEPS[0]
+            summary = "The proposed product baseline was rejected with a recorded rationale and cannot be authorized unchanged."
+            next_action = {"action": "reassess", "who": "product owner", "instruction": "Revise the affected intake facts so the system can prepare a materially new baseline."}
             complete = 0
         elif not self._baseline_authorized(workflow):
             step = STEPS[1]
@@ -353,15 +364,22 @@ class GuidedOperator:
             raise PermissionError("owner session required to register an execution driver")
         return AutonomousLoop(self.root).register_driver(name, kind, argv, session["principal"])
 
-    def decide(self, session_id, token, decision_id, outcome, confirmation):
-        result = self.copilot.decide(session_id, token, decision_id, outcome, confirmation)
+    def decide(self, session_id, token, decision_id, outcome, confirmation, reason=None):
+        result = self.copilot.decide(session_id, token, decision_id, outcome, confirmation, reason)
         effect = result.get("effect") or {}
         if outcome == "approve" and effect.get("scope", "").startswith("baseline:"):
             workflow = self._workflow();baseline = workflow["intake"]["baseline"]
             if effect["scope"] != self._baseline_scope(baseline):raise RuntimeError("authorized baseline no longer matches current intake")
             baseline.update({"decision": "authorized", "authorization_digest": effect["authorization_digest"], "authorized_at": int(time.time())})
+            binding=self.engine.bind_product_baseline(baseline,effect["authorization_digest"]);baseline.update({"specification_digest":binding["specification_digest"],"binding_digest":binding["binding_digest"]})
             intake = workflow["intake"];intake["state_digest"] = digest({key:value for key,value in intake.items() if key != "state_digest"});self._save_workflow(workflow)
+        elif outcome == "reject" and effect.get("scope", "").startswith("baseline:"):
+            workflow=self._workflow();baseline=workflow["intake"]["baseline"]
+            if effect["scope"]==self._baseline_scope(baseline):baseline.update({"decision":"rejected","rejection":{"record_digest":effect["rejection_digest"],"reason":reason,"rejected_at":int(time.time())}});self._save_workflow(workflow)
         return result
+
+    def revoke_mandate(self,session_id,token,run_id,reason,confirmation,superseding_run_id=None):
+        return self.copilot.revoke_mandate(session_id,token,run_id,reason,confirmation,superseding_run_id)
 
     def continue_run(self, session_id, token, run_id):
         result = self.copilot.resume(session_id, token, run_id);self._synchronize_execution_facts();return result

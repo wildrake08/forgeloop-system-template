@@ -37,6 +37,9 @@ class AutonomyTest(unittest.TestCase):
     def test_mandate_requires_human_authorizer(self):
         self.register()
         with self.assertRaises(PermissionError):self.engine.mandate('run1','x','fake',['tests/*'],['test_pass_rate'],signer='agent')
+    def test_mandate_can_be_exactly_revoked(self):
+        result=self.mandate();challenge='REVOKE run1 '+result['mandate_digest'];revoked=self.engine.revoke_mandate('run1','engineering-reviewer','objective withdrawn',challenge,'run2');self.assertEqual(revoked['state'],'revoked')
+        with self.assertRaisesRegex(PermissionError,'revoked'):self.loop.run('run1')
     def test_invalid_driver_protocol_is_rejected(self):
         self.register('bad',"print('{}')");self.engine.mandate('run1','x','bad',['tests/*'],['test_pass_rate'])
         with self.assertRaises(ValueError):self.loop.run('run1')

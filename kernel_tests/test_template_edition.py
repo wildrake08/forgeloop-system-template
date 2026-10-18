@@ -39,3 +39,20 @@ class TemplateEditionTests(unittest.TestCase):
         with temporary:
             (root/'link').symlink_to(root/'README.md')
             self.assertFalse(verify_scaffold(root,strict=True)['valid'])
+    def test_local_environment_and_build_metadata_are_safely_ignored(self):
+        temporary,root=self.scaffold()
+        with temporary:
+            (root/'.venv/bin').mkdir(parents=True);(root/'.venv/bin/python').symlink_to('/usr/bin/python3')
+            (root/'build/lib').mkdir(parents=True);(root/'build/lib/generated.py').write_text('generated\n')
+            (root/'package.egg-info').mkdir();(root/'package.egg-info/PKG-INFO').write_text('metadata\n')
+            self.assertTrue(verify_scaffold(root,strict=True)['valid'])
+    def test_unapproved_local_directory_remains_rejected(self):
+        temporary,root=self.scaffold()
+        with temporary:
+            (root/'private-cache').mkdir();(root/'private-cache/hidden.txt').write_text('unexpected\n')
+            self.assertFalse(verify_scaffold(root,strict=True)['valid'])
+    def test_symlink_outside_local_allowlist_remains_rejected(self):
+        temporary,root=self.scaffold()
+        with temporary:
+            (root/'src/alias.py').symlink_to(root/'README.md')
+            self.assertFalse(verify_scaffold(root,strict=True)['valid'])

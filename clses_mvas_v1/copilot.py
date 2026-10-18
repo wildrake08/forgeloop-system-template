@@ -93,6 +93,11 @@ class LifecycleCopilot:
 
     def _expected_scopes(self):
         scopes={};awaiting_release=False
+        workflow_path=self.store.state/'operator/workflow.json'
+        if workflow_path.exists():
+            baseline=read(workflow_path).get('intake',{}).get('baseline')
+            if baseline and baseline.get('decision')!='authorized':
+                excluded={'decision','authorization_digest','authorized_at','assumptions','resolved_facts'};basis={key:value for key,value in baseline.items() if key not in excluded};scopes['baseline:'+digest(basis)]={'kind':'product','subject':'system','purpose':'authorize exact minimum viable product baseline'}
         runs=self.store.state/'autonomy-runs'
         for path in runs.glob('*.json') if runs.exists() else []:
             state=read(path)
@@ -115,10 +120,16 @@ class LifecycleCopilot:
         self._session(session_id,token);expected=self._expected_scopes()
         if scope not in expected:raise PermissionError('scope is not an active lifecycle authority request')
         if human_evidence is not None and not isinstance(human_evidence,dict):raise ValueError('human evidence must be an object')
-        item=expected[scope];principal='engineering-reviewer' if item['kind']=='engineering' else 'release-owner';evidence={'scope':scope,'lifecycle':self.status(),'purpose':item['purpose'],'human_evidence':human_evidence or {}}
+        item=expected[scope];principal={'product':'owner','engineering':'engineering-reviewer','release':'release-owner'}[item['kind']];evidence={'scope':scope,'lifecycle':self.status(),'purpose':item['purpose'],'human_evidence':human_evidence or {}}
+        if scope.startswith('build:'):
+            for run in evidence['lifecycle']['runs']:
+                if run.get('build_scope')==scope:
+                    state=read(self.store.state/'autonomy-runs'/(run['run_id']+'.json'));trial=state.get('last_trial') or {}
+                    evidence['trial']={key:trial.get(key) for key in ('trial_evidence_digest','run_id','iteration','source_digest','started_at','finished_at','exit_code','stdout_sha256','stderr_sha256','transcript','passed')}
+                    break
         pending=evidence['lifecycle']['pending']
         if pending and (scope==pending.get('acceptance_scope') or scope==pending.get('release_scope')):
-            build=self.store.get(pending['build_digest'],'build','builder')['payload'];test=self.store.get(build['test_evidence_digest'],'test_evidence','builder')['payload'];evidence['artifact']={'artifact_digest':pending['artifact_digest'],'build_digest':pending['build_digest'],'test_exit_code':test['exit_code'],'test_transcript_sha256':digest(test['transcript'].encode())}
+            build=self.store.get(pending['build_digest'],'build','builder')['payload'];test=self.store.get(build['test_evidence_digest'],'test_evidence','builder')['payload'];evidence['artifact']={'artifact_digest':pending['artifact_digest'],'build_digest':pending['build_digest'],'test_evidence_digest':build['test_evidence_digest'],'test_exit_code':test['exit_code'],'test_transcript_sha256':digest(test['transcript'].encode()),'test_transcript':test['transcript']}
         return self._proposal('authorization',{'scope':scope,'kind':item['kind'],'subject':item['subject'],'evidence':evidence},principal,item['purpose'])
 
     def propose_specification(self,session_id,token,change_id,spec):

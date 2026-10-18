@@ -57,7 +57,11 @@ class Engine:
         else:raise ValueError('an active authorization already exists for this exact authority domain')
         payload={'authorization_id':str(uuid.uuid4()),'scope':scope,'kind':kind,'subject':subject,'decision':'approved','issued_at':int(time.time()),'valid_until':valid_until};identifier=self.store.commit('authorization_approved',signer,role,'authorization',payload);write(self.store.state/'authorizations'/(identifier+'.json'),{'digest':identifier});return {'scope':scope,'authorization_digest':identifier}
     def mandate(self,run_id,objective,driver,allowed_paths,requirements,max_iterations=5,max_changes=12,max_bytes=50000,expires_at=END,signer='engineering-reviewer'):
-        self.store.require(signer,'engineering_authorizer');_,spec,spec_digest=self._spec();known={x['key'] for x in spec['requirements']+spec['outcomes']}
+        self.store.require(signer,'engineering_authorizer');workflow_path=self.store.state/'operator/workflow.json'
+        if workflow_path.exists():
+            baseline=read(workflow_path).get('intake',{}).get('baseline');excluded={'decision','authorization_digest','authorized_at','assumptions','resolved_facts'};basis={key:value for key,value in (baseline or {}).items() if key not in excluded};scope='baseline:'+digest(basis)
+            if not baseline or baseline.get('decision')!='authorized' or baseline.get('authorization_digest')!=self.policy.authorization(scope,'product','system','owner')[0]:raise PermissionError('the exact product baseline requires explicit owner authorization before engineering')
+        _,spec,spec_digest=self._spec();known={x['key'] for x in spec['requirements']+spec['outcomes']}
         if not objective or not allowed_paths or not requirements or not set(requirements)<=known:raise ValueError('mandate must have an objective, path boundaries, and active criteria')
         if min(max_iterations,max_changes,max_bytes)<=0:raise ValueError('mandate budgets must be positive')
         path=self.store.state/'mandates'/(run_id+'.json')

@@ -34,10 +34,10 @@ class VisualOperatorTest(unittest.TestCase):
 
     def test_visual_onboarding_reaches_authority_step(self):
         result = self.service.dispatch("POST", "/api/onboarding/apply", {"template_id": "coffee-cart-pos", "answers": complete_answers()}, csrf="test-csrf")
-        self.assertEqual(result["view"]["current_step"], "authorize_engineering")
+        self.assertEqual(result["view"]["current_step"], "authorize_product_baseline")
         status = self.service.dispatch("GET", "/api/status")
         self.assertTrue(status["initialized"])
-        self.assertEqual(status["current_step"], "authorize_engineering")
+        self.assertEqual(status["current_step"], "authorize_product_baseline")
 
 
 if __name__ == "__main__":

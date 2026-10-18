@@ -45,7 +45,7 @@ class OperatorCliTest(unittest.TestCase):
             self.assertEqual(discovery["status"], "proposed_not_authorized")
             answers = Path(inputs) / "answers.json";answers.write_text(json.dumps(complete_answers()))
             result = json.loads(self.run_cli("--root", folder, "onboard", "--template", "coffee-cart-pos", "--answers", str(answers)).stdout)
-            self.assertEqual(result["view"]["current_step"], "authorize_engineering")
+            self.assertEqual(result["view"]["current_step"], "authorize_product_baseline")
 
 
 if __name__ == "__main__":

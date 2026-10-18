@@ -45,6 +45,15 @@ class GuidedOperatorTest(unittest.TestCase):
     def ready_intake(self):
         return self.operator.begin("point-of-sale", {"facts": complete_facts()}, now=100)
 
+    def authorize_baseline(self):
+        owner, token = self.session("owner")
+        packet = self.operator.prepare_authorizations(owner, token)
+        self.assertEqual(len(packet["items"]), 1)
+        item = packet["items"][0]
+        self.assertTrue(item["scope"].startswith("baseline:"))
+        self.operator.decide(owner, token, item["decision_id"], "approve", item["approve_exactly"])
+        return owner, token
+
     def mandate(self):
         return {
             "run_id": "guided-run",
@@ -72,8 +81,17 @@ class GuidedOperatorTest(unittest.TestCase):
     def test_complete_intake_moves_to_one_mandate_step(self):
         view = self.ready_intake()
         self.assertEqual(view["intake"]["question_count"], 0)
-        self.assertEqual(view["current_step"], "authorize_engineering")
+        self.assertEqual(view["current_step"], "authorize_product_baseline")
         self.assertEqual(view["intake"]["baseline"]["decision"], "proposed_not_authorized")
+
+    def test_mandate_is_blocked_until_product_baseline_is_authorized(self):
+        self.ready_intake();session, token = self.session("engineering-reviewer")
+        with self.assertRaisesRegex(PermissionError,"product baseline"):self.operator.propose_mandate(session, token, self.mandate())
+        with self.assertRaisesRegex(PermissionError,"product baseline"):self.operator.engine.mandate('bypass','bypass','driver',['tests/*'],['test_pass_rate'])
+        self.authorize_baseline();proposal=self.operator.propose_mandate(session, token, self.mandate());self.assertEqual(proposal["kind"],"mandate")
+
+    def test_baseline_authorization_is_exact_and_visible(self):
+        self.ready_intake();self.authorize_baseline();view=self.operator.status();self.assertEqual(view["current_step"],"authorize_engineering");self.assertEqual(view["intake"]["baseline"]["decision"],"authorized");self.assertRegex(view["intake"]["baseline"]["authorization_digest"],r"^[0-9a-f]{64}$")
 
     def test_mandate_is_blocked_until_intake_is_complete(self):
         self.operator.begin("point-of-sale", now=100)
@@ -104,6 +122,7 @@ class GuidedOperatorTest(unittest.TestCase):
 
     def test_release_requests_are_consolidated_but_decided_separately(self):
         self.ready_intake()
+        self.authorize_baseline()
         script = "import json;print(json.dumps({'status':'done','summary':'tests pass','changes':[]}))"
         owner, owner_token = self.session("owner")
         self.operator.register_driver(owner, owner_token, "guided-driver", "generic", [sys.executable, "-c", script, "{prompt}"])
@@ -117,7 +136,9 @@ class GuidedOperatorTest(unittest.TestCase):
 
         build_packet = self.operator.prepare_authorizations(eng, eng_token)
         self.assertEqual(len(build_packet["items"]), 1)
-        self.assertFalse((self.root / ".clses-v1" / "authorizations").exists())
+        self.assertTrue(build_packet["items"][0]["evidence"]["trial"]["passed"])
+        self.assertIn("Ran", build_packet["items"][0]["evidence"]["trial"]["transcript"])
+        self.assertFalse(self.operator._is_authorized(build_packet["items"][0]["scope"], {"kind": "engineering", "subject": "agent"}))
         build_item = build_packet["items"][0]
         self.operator.decide(eng, eng_token, build_item["decision_id"], "approve", build_item["approve_exactly"])
 
@@ -137,6 +158,10 @@ class GuidedOperatorTest(unittest.TestCase):
         final = self.operator.continue_run(release, release_token, "guided-run")["result"]
         self.assertTrue(final["valid"])
         self.assertEqual(self.operator.status()["current_step"], "operate_and_reassess")
+        self.assertEqual(self.operator.status()["progress"]["completed"], self.operator.status()["progress"]["total"])
+        self.assertIn("monitoring", self.operator.status()["headline"])
+        baseline=self.operator.status()["intake"]["baseline"];self.assertEqual(baseline["resolved_facts"]["implementation_language"]["value"],"Python");self.assertEqual(baseline["resolved_facts"]["architecture_status"]["value"],"implemented_and_verified_against_current_specification")
+        self.assertNotIn("implementation_language",self.operator.status()["intake"]["deferred"])
         self.assertIn("closed", self.operator.status()["evidence"]["summary"])
 
     def test_wrong_principal_cannot_prepare_anothers_packet(self):

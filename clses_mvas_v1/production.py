@@ -6,7 +6,7 @@ from .store import canonical,digest
 
 OPS={'>=':operator.ge,'>':operator.gt,'<=':operator.le,'<':operator.lt,'==':operator.eq,'!=':operator.ne}
 MONITORS={'source','dependencies','infrastructure','runtime','security','regulatory'}
-TOP={'format','system_id','spec_digest','assessed_at','artifact','acceptance','deployment','observations','change_monitors','supply_chain','recovery','operations','closure'}
+TOP={'format','system_id','spec_digest','assessed_at','artifact','acceptance','deployment','observations','outcome_periods','change_monitors','supply_chain','recovery','operations','closure'}
 
 def inventory(root):
     root=Path(root);return [{'path':str(path.relative_to(root)),'sha256':digest(path.read_bytes()),'size':path.stat().st_size} for path in sorted(p for p in root.rglob('*') if p.is_file() and not p.is_symlink())]
@@ -32,6 +32,14 @@ def assess(bundle,spec,deployment_root,trusted_public_key,now=None):
         valid=(item.get('measurement_key')==criterion['measurement_key'] and item.get('unit')==criterion['unit'] and isinstance(item.get('value'),(int,float)) and OPS[criterion['op']](item['value'],criterion['threshold']) and item.get('coverage')==1.0 and item.get('source')==criterion['source'] and isinstance(item.get('method'),str) and bool(item['method']) and isinstance(item.get('adapter_digest'),str) and len(item['adapter_digest'])==64 and isinstance(item.get('raw_evidence_sha256'),str) and len(item['raw_evidence_sha256'])==64 and isinstance(item.get('observed_at'),int) and isinstance(item.get('expires_at'),int) and item['observed_at']<=now<=item['expires_at'] and item.get('environment_id')==deployment.get('environment_id'))
         if not valid:errors.append('criterion evidence is invalid, failing, stale, or ungrounded: '+str(key))
     checks['criteria_exact']=set(observed)==set(criteria);checks['criteria_grounded']=checks['criteria_exact'] and not any(x.startswith('criterion evidence') or x.startswith('duplicate observation') or x.startswith('observation has unknown') for x in errors)
+    outcomes={item['key']:item for item in spec.get('outcomes',[])};period_sets=e.get('outcome_periods',[]);indexed_periods={item.get('criterion_key'):item for item in period_sets if isinstance(item,dict)};periods_ok=len(indexed_periods)==len(period_sets) and set(indexed_periods)==set(outcomes)
+    for key,criterion in outcomes.items():
+        item=indexed_periods.get(key,{});periods=item.get('periods',[]) if isinstance(item,dict) else []
+        shape=(set(item)=={'criterion_key','minimum_sustained_periods','periods'} and item.get('minimum_sustained_periods',0)>=2 and len(periods)>=item.get('minimum_sustained_periods',0) and all(isinstance(p,dict) and set(p)=={'start','end','value','raw_evidence_sha256'} and isinstance(p.get('start'),int) and isinstance(p.get('end'),int) and p['start']<p['end']<=now and isinstance(p.get('value'),(int,float)) and OPS[criterion['op']](p['value'],criterion['threshold']) and isinstance(p.get('raw_evidence_sha256'),str) and len(p['raw_evidence_sha256'])==64 for p in periods))
+        ordered=shape and all(periods[i-1]['end']<=periods[i]['start'] for i in range(1,len(periods)))
+        distinct=shape and len({p['raw_evidence_sha256'] for p in periods})==len(periods)
+        periods_ok=periods_ok and shape and ordered and distinct
+    checks['outcomes_sustained']=periods_ok
     acceptance=e.get('acceptance',{});checks['acceptance']=acceptance.get('artifact_digest')==artifact.get('digest') and acceptance.get('passed') is True and all(isinstance(acceptance.get(k),str) and acceptance[k] for k in ('actor','decision_digest','evidence_digest'))
     monitors=e.get('change_monitors',[]);indexed={x.get('domain'):x for x in monitors};checks['change_monitors']=set(indexed)==MONITORS and len(monitors)==len(MONITORS) and all(x.get('status')=='current' and x.get('checked_at',now+1)<=now<=x.get('expires_at',-1) and isinstance(x.get('evidence_digest'),str) and len(x['evidence_digest'])==64 for x in monitors)
     supply=e.get('supply_chain',{});checks['supply_chain']=all(isinstance(supply.get(k),str) and len(supply[k])==64 for k in ('sbom_digest','provenance_digest','dependency_lock_digest','vulnerability_scan_digest','license_scan_digest')) and supply.get('critical_vulnerabilities')==0 and supply.get('policy_passed') is True

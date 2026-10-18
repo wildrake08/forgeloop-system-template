@@ -7,7 +7,7 @@
   "properties": {
     "format": {"const": "CLSES-authorization-request-packet/v1"},
     "packet_id": {"type": "string", "minLength": 1},
-    "required_principal": {"enum": ["engineering-reviewer", "release-owner"]},
+    "required_principal": {"enum": ["owner", "engineering-reviewer", "release-owner"]},
     "created_at": {"type": "integer", "minimum": 0},
     "status": {"const": "awaiting_explicit_decisions"},
     "items": {

@@ -13,7 +13,7 @@ class Store:
     def __init__(self,root):self.root=Path(root).resolve();self.state=self.root/'.clses-v1'
     def bootstrap(self):
         if self.state.exists():raise ValueError('workspace already initialized')
-        principals={'owner':['trust_admin'],'agent':['agent','builder'],'engineering-reviewer':['engineering_authorizer'],'release-owner':['spec_acceptor','artifact_acceptor','release_authorizer','assessor'],'operator':['deployer'],'monitor':['observer']};trust={'format':'CLSES-trust/v1','model':'local-hmac-sha256','principals':{}}
+        principals={'owner':['trust_admin','product_authorizer'],'agent':['agent','builder'],'engineering-reviewer':['engineering_authorizer'],'release-owner':['spec_acceptor','artifact_acceptor','release_authorizer','assessor'],'operator':['deployer'],'monitor':['observer']};trust={'format':'CLSES-trust/v1','model':'local-hmac-sha256','principals':{}}
         for name,roles in principals.items():
             key=secrets.token_bytes(32);path=self.state/'keys'/(name+'.key');path.parent.mkdir(parents=True,exist_ok=True);path.write_text(key.hex()+'\n');os.chmod(path,0o600);trust['principals'][name]={'roles':roles,'key_id':digest(key)[:24],'active':True}
         write(self.state/'trust.json',trust)

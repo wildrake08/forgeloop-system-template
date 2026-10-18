@@ -8,7 +8,7 @@ The intake engine derives system class from the selected profile, derives a stab
 
 Purpose, beneficiaries, outcome targets, data exposure, operating conditions, and authority identities have no silent defaults. Conflicting values produce a resolution question. Answers that were not requested are rejected, preventing the intake interaction from becoming an ungoverned configuration channel.
 
-Once the minimum facts are complete, the engine emits one consolidated `CLSES-minimum-viable-baseline/v1` proposal. Its decision is always `proposed_not_authorized`; conversation and silence never approve it. Existing CLSES authority mechanisms must accept the baseline before it governs execution.
+Once the minimum facts are complete, the engine emits one consolidated `CLSES-minimum-viable-baseline/v1` proposal. Its decision begins as `proposed_not_authorized`; conversation and silence never approve it. The owner must explicitly approve its stable product-intent digest through the authority plane. The engine blocks every guided mandate, including a direct-engine bypass attempt, until that exact authorization exists. Execution-derived architecture and language facts may resolve reversible assumptions without changing the authorized product intent; their evidence source and resolution time remain visible.
 
 Material changes name affected facts. Only those facts and dependent conclusions are reopened. The engine preserves its question history, invalidates affected assumptions, and prepares a new proposal after resolution.
 

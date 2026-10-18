@@ -40,4 +40,13 @@ class AutonomyTest(unittest.TestCase):
     def test_invalid_driver_protocol_is_rejected(self):
         self.register('bad',"print('{}')");self.engine.mandate('run1','x','bad',['tests/*'],['test_pass_rate'])
         with self.assertRaises(ValueError):self.loop.run('run1')
+    def test_empty_driver_output_has_actionable_error(self):
+        self.register('empty',"pass");self.engine.mandate('run-empty','x','empty',['tests/*'],['test_pass_rate'])
+        with self.assertRaisesRegex(RuntimeError,'empty response.*authenticated'):self.loop.run('run-empty')
+    def test_non_json_driver_output_has_actionable_error(self):
+        self.register('text',"print('login required')");self.engine.mandate('run-text','x','text',['tests/*'],['test_pass_rate'])
+        with self.assertRaisesRegex(RuntimeError,'non-JSON output.*login required'):self.loop.run('run-text')
+    def test_missing_driver_executable_has_actionable_error(self):
+        self.loop.register_driver('missing','generic',['definitely-not-a-real-clses-executable','{prompt}']);self.engine.mandate('run-missing','x','missing',['tests/*'],['test_pass_rate'])
+        with self.assertRaisesRegex(RuntimeError,'executable was not found'):self.loop.run('run-missing')
 if __name__=='__main__':unittest.main()

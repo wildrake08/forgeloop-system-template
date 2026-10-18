@@ -2,7 +2,7 @@
 
 Minimal engagement begins before lifecycle execution. `clses-intake` reads existing context and the composed profile, asks only irreducible material questions, and emits a consolidated baseline proposal for explicit human review. It has no authority effect.
 
-`clses-operator` presents that engagement and subsequent execution as one six-step journey. Its plain-language view and consolidated review packets are projections of governed state, not alternate authority or evidence stores.
+`clses-operator` presents that engagement and subsequent execution as one seven-step journey, including an explicit product-baseline authorization before engineering. Its plain-language view and consolidated review packets are projections of governed state, not alternate authority or evidence stores.
 
 The `software-quality` profile adds reusable quality dimensions and measurable criteria to the same lifecycle graph. System-class overlays inherit those controls and add their own. Context tags select optional criteria, named authorities establish thresholds, evidence adapters measure them, and change kinds identify affected conclusions for reassessment.
 

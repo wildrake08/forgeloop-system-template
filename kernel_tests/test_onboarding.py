@@ -40,7 +40,7 @@ class OnboardingTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             result = apply_onboarding(folder, "coffee-cart-pos", complete_answers())
             self.assertEqual(result["view"]["intake"]["question_count"], 0)
-            self.assertEqual(result["view"]["current_step"], "authorize_engineering")
+            self.assertEqual(result["view"]["current_step"], "authorize_product_baseline")
             self.assertEqual(result["view"]["intake"]["baseline"]["decision"], "proposed_not_authorized")
 
     def test_discovery_requires_explicit_acceptance_and_digest_integrity(self):

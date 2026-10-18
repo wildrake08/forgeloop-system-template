@@ -30,9 +30,19 @@ class AutonomousLoop:
             for token in driver['argv']:
                 for old,new in replacements.items():token=token.replace(old,new)
                 command.append(token)
-            started=int(time.time());cp=subprocess.run(command,cwd=view,capture_output=True,text=True,timeout=600,env=os.environ.copy());finished=int(time.time())
-            if cp.returncode:raise RuntimeError('external agent failed: '+cp.stderr[-2000:])
-            raw=output.read_text() if driver['output_mode']=='file' else cp.stdout;response=json.loads(raw);self._validate_response(response);payload={'run_id':run_id,'iteration':iteration,'driver_digest':driver_id,'command_digest':digest(command),'started_at':started,'finished_at':finished,'exit_code':cp.returncode,'stdout_sha256':digest(cp.stdout.encode()),'stderr_sha256':digest(cp.stderr.encode()),'response':response};record_id=self.store.commit('external_agent_completed','agent','agent','external_agent_result',payload);return response,record_id,context['current_snapshot']
+            started=int(time.time())
+            try:cp=subprocess.run(command,cwd=view,capture_output=True,text=True,timeout=600,env=os.environ.copy())
+            except FileNotFoundError as exc:raise RuntimeError('external agent executable was not found: '+command[0]+'. Install it or register a valid absolute executable path.') from exc
+            except subprocess.TimeoutExpired as exc:raise RuntimeError('external agent timed out after 600 seconds; inspect its authentication, connectivity, and prompt configuration') from exc
+            finished=int(time.time())
+            detail=(cp.stderr or cp.stdout).strip()[-2000:]
+            if cp.returncode:raise RuntimeError('external agent exited with code '+str(cp.returncode)+(': '+detail if detail else ' and produced no diagnostic output'))
+            if driver['output_mode']=='file' and not output.exists():raise RuntimeError('external agent produced no response file; verify its output option and authentication')
+            raw=output.read_text() if driver['output_mode']=='file' else cp.stdout
+            if not raw.strip():raise RuntimeError('external agent produced an empty response; verify that the CLI is authenticated and prints JSON in non-interactive mode')
+            try:response=json.loads(raw)
+            except json.JSONDecodeError as exc:raise RuntimeError('external agent returned non-JSON output: '+raw.strip()[-1000:]) from exc
+            self._validate_response(response);payload={'run_id':run_id,'iteration':iteration,'driver_digest':driver_id,'command_digest':digest(command),'started_at':started,'finished_at':finished,'exit_code':cp.returncode,'stdout_sha256':digest(cp.stdout.encode()),'stderr_sha256':digest(cp.stderr.encode()),'response':response};record_id=self.store.commit('external_agent_completed','agent','agent','external_agent_result',payload);return response,record_id,context['current_snapshot']
     def _validate_response(self,value):
         if not isinstance(value,dict) or set(value)!=set(OUTPUT_SCHEMA['required']) or value['status'] not in ('propose_changes','done','blocked') or not isinstance(value['summary'],str) or not isinstance(value['changes'],list):raise ValueError('external agent response violates protocol')
         if value['status']!='propose_changes' and value['changes']:raise ValueError('non-proposal response cannot contain changes')

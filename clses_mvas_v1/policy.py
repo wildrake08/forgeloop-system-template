@@ -1,7 +1,7 @@
 """Single decision point for all state-changing operations."""
 from __future__ import annotations
 import time
-from .store import read
+from .store import digest,read
 
 ROLES={'spec_propose':'agent','spec_apply':'spec_acceptor','work_request':'agent','work_execute':'agent','build':'builder','accept':'artifact_acceptor','release':'deployer','observe':'observer','close':'assessor'}
 
@@ -17,6 +17,12 @@ class Policy:
             except (ValueError,PermissionError,FileNotFoundError,KeyError):continue
         if not candidates:raise PermissionError(f'missing {kind} authorization for exact scope {scope}')
         return candidates[-1]
+    def rejection(self,scope,kind,subject,required_signer):
+        pointer=self.store.state/'rejections'/(digest(scope)+'.json')
+        if not pointer.exists():raise PermissionError(f'no rejection for exact scope {scope}')
+        value=read(pointer);record=self.store.get(value['digest'],'authorization_rejection',kind+'_authorizer');payload=record['payload']
+        if payload['scope']!=scope or payload['kind']!=kind or payload['subject']!=subject or payload['decision']!='rejected' or record['actor']!=required_signer:raise ValueError(f'invalid rejection record for exact scope {scope}')
+        return value['digest'],record
     def changed_paths_allowed(self,changes,executions,spec_digest):
         indexed={(x['path'],x['after_sha256']):x for x in executions if x['spec_digest']==spec_digest}
         for change in changes:

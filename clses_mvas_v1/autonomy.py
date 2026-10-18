@@ -23,9 +23,9 @@ class AutonomousLoop:
     def _driver(self,name):
         pointer=read(self.store.state/'drivers'/(name+'.json'));return pointer['digest'],self.store.get(pointer['digest'],'driver_profile','trust_admin')['payload']
     def _invoke(self,run_id,iteration,mandate,last_trial):
-        driver_id,driver=self._driver(mandate['driver']);context={'run_id':run_id,'iteration':iteration,'objective':mandate['objective'],'allowed_paths':mandate['allowed_paths'],'requirement_keys':mandate['requirement_keys'],'budgets':{k:mandate[k] for k in ('max_iterations','max_changes','max_bytes')},'spec':self.engine._spec()[1],'current_snapshot':self.engine._snapshot(),'previous_trial':last_trial}
+        driver_id,driver=self._driver(mandate['driver']);context={'run_id':run_id,'iteration':iteration,'objective':mandate['objective'],'allowed_paths':mandate['allowed_paths'],'requirement_keys':mandate['requirement_keys'],'budgets':{k:mandate[k] for k in ('max_iterations','max_changes','max_bytes')},'spec':self.engine._spec()[1],'current_snapshot':self.engine._snapshot(),'previous_trial':last_trial,'review_feedback':(last_trial or {}).get('review_feedback')}
         with tempfile.TemporaryDirectory(prefix='clses-agent-view-') as folder:
-            view=Path(folder);shutil.copytree(self.root/'src',view/'src');shutil.copytree(self.root/'tests',view/'tests');write(view/'context.json',context);write(view/'response.schema.json',OUTPUT_SCHEMA);output=view/'response.json';prompt=('Act as the autonomous engineering executor for the objective in context.json. Inspect the read-only source and tests in this directory and the previous trial evidence. Return only a response matching response.schema.json. Propose the smallest bounded changes needed. Do not authorize, accept, release, deploy, or alter the specification.')
+            view=Path(folder);shutil.copytree(self.root/'src',view/'src');shutil.copytree(self.root/'tests',view/'tests');write(view/'context.json',context);write(view/'response.schema.json',OUTPUT_SCHEMA);output=view/'response.json';prompt=('Act as the autonomous engineering executor for the objective in context.json. Inspect the read-only source and tests, previous trial evidence, and review feedback. Return only a response matching response.schema.json. Propose the smallest bounded changes needed. Never echo or persist raw secrets, credentials, payment-card numbers, or other sensitive input; use categorical redacted errors. Do not authorize, accept, release, deploy, or alter the specification.')
             replacements={'{prompt}':prompt,'{schema}':str(view/'response.schema.json'),'{output}':str(output),'{context}':str(view/'context.json')};command=[]
             for token in driver['argv']:
                 for old,new in replacements.items():token=token.replace(old,new)
@@ -53,6 +53,9 @@ class AutonomousLoop:
         mandate_id,mandate=self.engine._mandate(run_id);state_path=self._state_path(run_id);state=read(state_path) if state_path.exists() else {'run_id':run_id,'mandate_digest':mandate_id,'phase':'engineering','iteration':0,'changes':0,'bytes':0,'last_trial':None,'agent_records':[]}
         if state['mandate_digest']!=mandate_id:raise ValueError('autonomy state mandate mismatch')
         if state['phase']=='complete':return state['result']
+        if state['phase']=='revoked':raise PermissionError('autonomy run mandate is revoked')
+        if state['phase']=='changes_requested':
+            state['last_trial']={**(state.get('last_trial') or {}),'review_feedback':state.get('rejection')};state['phase']='engineering'
         if state['phase']=='awaiting_release':
             pending=read(self.store.state/'pending.json');missing=[]
             for scope in (pending['acceptance_scope'],pending['release_scope']):
@@ -79,5 +82,10 @@ class AutonomousLoop:
                 state['changes']+=len(response['changes']);state['bytes']+=proposed_bytes
             trial=self.engine.trial(run_id,iteration);state['last_trial']=trial;write(state_path,state)
             if trial['passed']:
-                plan=self.engine.plan();state.update({'phase':'awaiting_build','build_scope':plan['build_scope'],'change_set_digest':plan['change_set_digest']});write(state_path,state);return {'state':'awaiting_non_autonomous_authority','required_scopes':[plan['build_scope']],'run_id':run_id,'phase':'build','iterations':state['iteration'],'changes':state['changes']}
+                plan=self.engine.plan();scope=plan['build_scope']
+                try:rejection=self.engine.policy.rejection(scope,'engineering','agent','engineering-reviewer')
+                except PermissionError:rejection=None
+                if rejection:
+                    reason=rejection[1]['payload']['reason'];state['last_trial']={**trial,'review_feedback':{'scope':scope,'reason':reason,'rejection_digest':rejection[0]}};state['phase']='engineering';write(state_path,state);continue
+                state.update({'phase':'awaiting_build','build_scope':scope,'change_set_digest':plan['change_set_digest']});write(state_path,state);return {'state':'awaiting_non_autonomous_authority','required_scopes':[scope],'run_id':run_id,'phase':'build','iterations':state['iteration'],'changes':state['changes']}
         state['phase']='budget_exhausted';write(state_path,state);return {'state':'budget_exhausted','run_id':run_id,'iterations':state['iteration'],'changes':state['changes'],'last_trial':state['last_trial']}

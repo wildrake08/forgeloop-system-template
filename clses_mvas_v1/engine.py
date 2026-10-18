@@ -17,7 +17,7 @@ def validate_spec(value):
     if set(value)!=required or value['format']!='CLSES-system-spec/v1' or not value['system_id'] or not value['purpose'] or not value['beneficiaries']:raise ValueError('invalid specification shape or identity')
     keys=[]
     for item in value['outcomes']+value['requirements']:
-        if set(item)!={'key','variable','op','threshold','unit','source','measurement_key'} or item['op']!='>=' or item['unit']!='ratio' or item['source'] not in ('build','observe') or not 0<=item['threshold']<=1:raise ValueError('unsupported criterion')
+        if set(item)!={'key','variable','op','threshold','unit','source','measurement_key'} or item['op'] not in ('>=','>','<=','<','==') or item['source'] not in ('build','observe') or not isinstance(item['threshold'],(int,float)) or isinstance(item['threshold'],bool) or not item['key'] or not item['variable'] or not item['unit'] or not item['measurement_key']:raise ValueError('unsupported criterion')
         keys.append(item['key'])
     if len(keys)!=len(set(keys)):raise ValueError('criterion keys must be unique')
     return value
@@ -52,25 +52,80 @@ class Engine:
         spec_id=self.store.commit('specification_established','release-owner','spec_acceptor','specification',{'spec':value,'spec_digest':digest(value),'authority':'template_adoption' if template_manifest else 'bootstrap','template_manifest_digest':template_digest,'template_customizations':template_customizations},'spec');baseline={'snapshot':self._snapshot(),'spec_digest':digest(value),'accepted_executions':[],'cycle_digest':None,'template_manifest_digest':template_digest,'template_customizations':template_customizations};self.store.commit('baseline_established','release-owner','assessor','baseline',baseline,'baseline');write(self.store.state/'policy.json',{'format':'CLSES-policy/v1','default':'deny','agent_only_changes':True,'trace_required':True,'exact_change_set_authorization':True,'spec_acceptance_required':True,'artifact_acceptance_required':True,'deployment_authorization_required':True});return {'system_id':value['system_id'],'spec_record_digest':spec_id,'state':'initialized','mode':'strict','template_manifest_digest':template_digest,'template_customizations':template_customizations}
     def authorize(self,scope,kind,signer,subject,valid_until=END):
         role=kind+'_authorizer';self.store.require(signer,role)
+        try:self.policy.rejection(scope,kind,subject,signer)
+        except PermissionError:pass
+        else:raise PermissionError('exact authority scope was rejected; materially revise the subject to create a new scope')
         try:self.policy.authorization(scope,kind,subject,signer)
         except PermissionError:pass
         else:raise ValueError('an active authorization already exists for this exact authority domain')
         payload={'authorization_id':str(uuid.uuid4()),'scope':scope,'kind':kind,'subject':subject,'decision':'approved','issued_at':int(time.time()),'valid_until':valid_until};identifier=self.store.commit('authorization_approved',signer,role,'authorization',payload);write(self.store.state/'authorizations'/(identifier+'.json'),{'digest':identifier});return {'scope':scope,'authorization_digest':identifier}
+    @staticmethod
+    def baseline_basis(baseline):
+        excluded={'decision','authorization_digest','authorized_at','assumptions','resolved_facts','specification_digest','binding_digest','rejection'}
+        return {key:value for key,value in baseline.items() if key not in excluded}
+    def bind_product_baseline(self,baseline,authorization_digest,signer='owner'):
+        self.store.require(signer,'product_authorizer');scope='baseline:'+digest(self.baseline_basis(baseline));authorization=self.policy.authorization(scope,'product','system',signer)
+        if authorization[0]!=authorization_digest:raise PermissionError('product authorization does not bind this baseline')
+        _,current,_=self._spec();outcome=baseline.get('outcome_hypothesis') or {}
+        required={'metric','operator','target','unit'}
+        if not required<=set(outcome):raise ValueError('authorized baseline must declare a measurable outcome')
+        spec={**current,'purpose':baseline['purpose'],'beneficiaries':baseline['beneficiaries'],'outcomes':[{'key':outcome['metric'],'variable':outcome['metric'],'op':outcome['operator'],'threshold':outcome['target'],'unit':outcome['unit'],'source':'observe','measurement_key':outcome['metric']}],'operating_conditions':baseline['operating_conditions']}
+        obligations=[str(x) for x in baseline.get('compliance_obligations',[])]
+        if any('payment' in x.lower() or 'card' in x.lower() for x in obligations):
+            guard='raw payment-card data prohibited; sensitive inputs fail closed without reflection'
+            spec['constraints']=list(dict.fromkeys(spec['constraints']+[guard]))
+        spec=validate_spec(spec);spec_digest=digest(spec);payload={'spec':spec,'spec_digest':spec_digest,'authority':'authorized_product_baseline','baseline_scope':scope,'baseline_digest':digest(self.baseline_basis(baseline)),'product_authorization_digest':authorization_digest}
+        spec_record=self.store.commit('product_baseline_bound',signer,'product_authorizer','specification',payload,'spec')
+        binding={'baseline_scope':scope,'baseline_digest':payload['baseline_digest'],'authorization_digest':authorization_digest,'specification_digest':spec_digest,'specification_record_digest':spec_record,'bound_at':int(time.time())}
+        binding_digest=self.store.commit('product_baseline_binding_established',signer,'product_authorizer','product_baseline_binding',binding,'product-binding')
+        return {**binding,'binding_digest':binding_digest}
+    def verify_product_binding(self,baseline):
+        scope='baseline:'+digest(self.baseline_basis(baseline));authorization=self.policy.authorization(scope,'product','system','owner');binding_id,binding_record=self.store.deref('product-binding','product_baseline_binding','product_authorizer');binding=binding_record['payload'];_,spec,spec_digest=self._spec();outcome=baseline.get('outcome_hypothesis') or {}
+        expected={'key':outcome.get('metric'),'variable':outcome.get('metric'),'op':outcome.get('operator'),'threshold':outcome.get('target'),'unit':outcome.get('unit'),'source':'observe','measurement_key':outcome.get('metric')}
+        valid=(baseline.get('decision')=='authorized' and baseline.get('authorization_digest')==authorization[0]==binding.get('authorization_digest') and binding.get('baseline_scope')==scope and binding.get('baseline_digest')==digest(self.baseline_basis(baseline)) and binding.get('specification_digest')==spec_digest and spec.get('purpose')==baseline.get('purpose') and spec.get('beneficiaries')==baseline.get('beneficiaries') and spec.get('outcomes')==[expected] and spec.get('operating_conditions')==baseline.get('operating_conditions'))
+        if not valid:raise PermissionError('authorized product baseline is not exactly bound to the active executable specification')
+        return {'binding_digest':binding_id,'specification_digest':spec_digest}
+    def reject_authorization(self,scope,kind,subject,signer,proposal_digest,reason):
+        role=kind+'_authorizer';self.store.require(signer,role)
+        if not isinstance(reason,str) or not reason.strip():raise ValueError('rejection requires a nonempty rationale')
+        payload={'scope':scope,'kind':kind,'subject':subject,'decision':'rejected','proposal_digest':proposal_digest,'reason':reason.strip(),'decided_at':int(time.time())};identifier=self.store.commit('authorization_rejected',signer,role,'authorization_rejection',payload);write(self.store.state/'rejections'/(digest(scope)+'.json'),{'digest':identifier})
+        affected=[]
+        for path in (self.store.state/'autonomy-runs').glob('*.json') if (self.store.state/'autonomy-runs').exists() else []:
+            state=read(path);pending=state.get('pending') or {}
+            if state.get('build_scope')==scope or scope in (pending.get('acceptance_scope'),pending.get('release_scope')):
+                state.update({'phase':'changes_requested','rejection':{'scope':scope,'reason':reason.strip(),'record_digest':identifier}});write(path,state);affected.append(state['run_id'])
+        return {'scope':scope,'rejection_digest':identifier,'state':'rejected','affected_runs':affected}
     def mandate(self,run_id,objective,driver,allowed_paths,requirements,max_iterations=5,max_changes=12,max_bytes=50000,expires_at=END,signer='engineering-reviewer'):
         self.store.require(signer,'engineering_authorizer');workflow_path=self.store.state/'operator/workflow.json'
         if workflow_path.exists():
-            baseline=read(workflow_path).get('intake',{}).get('baseline');excluded={'decision','authorization_digest','authorized_at','assumptions','resolved_facts'};basis={key:value for key,value in (baseline or {}).items() if key not in excluded};scope='baseline:'+digest(basis)
-            if not baseline or baseline.get('decision')!='authorized' or baseline.get('authorization_digest')!=self.policy.authorization(scope,'product','system','owner')[0]:raise PermissionError('the exact product baseline requires explicit owner authorization before engineering')
+            baseline=read(workflow_path).get('intake',{}).get('baseline')
+            try:
+                if not baseline:raise PermissionError('missing baseline')
+                self.verify_product_binding(baseline)
+            except (PermissionError,FileNotFoundError,ValueError,KeyError) as exc:raise PermissionError('the exact product baseline requires explicit owner authorization and executable-specification binding before engineering') from exc
         _,spec,spec_digest=self._spec();known={x['key'] for x in spec['requirements']+spec['outcomes']}
         if not objective or not allowed_paths or not requirements or not set(requirements)<=known:raise ValueError('mandate must have an objective, path boundaries, and active criteria')
         if min(max_iterations,max_changes,max_bytes)<=0:raise ValueError('mandate budgets must be positive')
         path=self.store.state/'mandates'/(run_id+'.json')
         if path.exists():raise ValueError('autonomy run id is immutable and already used')
-        payload={'run_id':run_id,'objective':objective,'driver':driver,'allowed_paths':sorted(set(allowed_paths)),'requirement_keys':sorted(set(requirements)),'max_iterations':max_iterations,'max_changes':max_changes,'max_bytes':max_bytes,'expires_at':expires_at,'spec_digest':spec_digest,'subject':'agent','decision':'approved'};identifier=self.store.commit('autonomy_mandated',signer,'engineering_authorizer','autonomy_mandate',payload);write(path,{'digest':identifier});return {'run_id':run_id,'mandate_digest':identifier,'state':'authorized','authority_boundary':'engineering iteration only; no specification acceptance, artifact acceptance, or deployment authorization'}
+        payload={'run_id':run_id,'objective':objective,'driver':driver,'allowed_paths':sorted(set(allowed_paths)),'requirement_keys':sorted(set(requirements)),'max_iterations':max_iterations,'max_changes':max_changes,'max_bytes':max_bytes,'expires_at':expires_at,'spec_digest':spec_digest,'subject':'agent','decision':'approved'};identifier=self.store.commit('autonomy_mandated',signer,'engineering_authorizer','autonomy_mandate',payload);write(path,{'digest':identifier,'status':'active'});return {'run_id':run_id,'mandate_digest':identifier,'state':'authorized','authority_boundary':'engineering iteration only; no specification acceptance, artifact acceptance, or deployment authorization'}
     def _mandate(self,run_id):
-        pointer=read(self.store.state/'mandates'/(run_id+'.json'));record=self.store.get(pointer['digest'],'autonomy_mandate','engineering_authorizer');payload=record['payload']
+        pointer=read(self.store.state/'mandates'/(run_id+'.json'))
+        if pointer.get('status','active')!='active':raise PermissionError('autonomy mandate is revoked')
+        record=self.store.get(pointer['digest'],'autonomy_mandate','engineering_authorizer');payload=record['payload']
         if record['actor']!='engineering-reviewer' or payload['decision']!='approved' or payload['expires_at']<int(time.time()) or payload['spec_digest']!=self._spec()[2]:raise PermissionError('autonomy mandate is invalid, expired, or stale')
         return pointer['digest'],payload
+    def revoke_mandate(self,run_id,signer,reason,confirmation,superseding_run_id=None):
+        self.store.require(signer,'engineering_authorizer');path=self.store.state/'mandates'/(run_id+'.json');pointer=read(path)
+        if pointer.get('status','active')!='active':raise ValueError('autonomy mandate is already inactive')
+        required='REVOKE '+run_id+' '+pointer['digest']
+        if confirmation!=required:raise PermissionError('exact mandate revocation challenge was not confirmed')
+        if not isinstance(reason,str) or not reason.strip():raise ValueError('mandate revocation requires a nonempty rationale')
+        if superseding_run_id==run_id:raise ValueError('superseding run id must be new')
+        payload={'run_id':run_id,'mandate_digest':pointer['digest'],'reason':reason.strip(),'superseding_run_id':superseding_run_id,'revoked_at':int(time.time())};record=self.store.commit('autonomy_mandate_revoked',signer,'engineering_authorizer','autonomy_mandate_revocation',payload);write(path,{**pointer,'status':'revoked','revocation_digest':record})
+        state_path=self.store.state/'autonomy-runs'/(run_id+'.json')
+        if state_path.exists():state=read(state_path);state.update({'phase':'revoked','revocation_digest':record});write(state_path,state)
+        return {'run_id':run_id,'state':'revoked','revocation_digest':record,'superseding_run_id':superseding_run_id}
     def propose_spec(self,change_id,spec,actor='agent'):
         self.policy.require_action('spec_propose',actor)
         if (self.store.state/'spec-proposals'/(change_id+'.json')).exists():raise ValueError('specification change id is immutable and already used')

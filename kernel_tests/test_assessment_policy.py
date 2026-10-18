@@ -1,5 +1,6 @@
-import copy,unittest
-from clses_mvas_v1.release_assessment import load_policy,policy_checks
+import copy,tempfile,unittest
+from pathlib import Path
+from clses_mvas_v1.release_assessment import inventory,load_policy,policy_checks
 
 class AssessmentPolicyTest(unittest.TestCase):
     def setUp(self):
@@ -15,4 +16,8 @@ class AssessmentPolicyTest(unittest.TestCase):
         changed=copy.deepcopy(self.evidence);changed['tests']['tests']=self.policy['minimum_tests']-1;self.assertFalse(policy_checks(changed,self.policy)['minimum_tests'])
     def test_missing_boundary_disclosure_fails(self):
         changed=copy.deepcopy(self.evidence);changed['claim_boundary']='';self.assertFalse(policy_checks(changed,self.policy)['claim_boundary'])
+    def test_release_inventory_excludes_only_safe_local_metadata(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);(root/'.venv/bin').mkdir(parents=True);(root/'.venv/bin/python').write_text('local');(root/'package.egg-info').mkdir();(root/'package.egg-info/PKG-INFO').write_text('local');(root/'source.txt').write_text('governed');(root/'unexpected').mkdir();(root/'unexpected/value.txt').write_text('governed')
+            paths={item['path'] for item in inventory(root)};self.assertEqual(paths,{'source.txt','unexpected/value.txt'})
 if __name__=='__main__':unittest.main()

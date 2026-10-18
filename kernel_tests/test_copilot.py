@@ -20,6 +20,9 @@ class CopilotTest(unittest.TestCase):
     def test_bad_token_is_rejected(self):
         session,_=self.session('operator')
         with self.assertRaises(PermissionError):self.copilot.say(session,'wrong','status')
+    def test_session_can_be_explicitly_revoked(self):
+        session,token=self.session('owner');result=self.copilot.close_session(session,token);self.assertEqual(result['state'],'revoked')
+        with self.assertRaises(PermissionError):self.copilot.say(session,token,'status')
     def test_status_conversation_is_non_authoritative(self):
         session,token=self.session('operator');result=self.copilot.say(session,token,'Where are we and what is next?');self.assertIn('initialized',result['response']);self.assertFalse(result['authoritative'])
     def test_external_facilitator_is_advisory_only(self):
@@ -33,8 +36,8 @@ class CopilotTest(unittest.TestCase):
         release,release_token=self.session('release-owner')
         with self.assertRaises(PermissionError):self.copilot.decide(release,release_token,proposal['decision_id'],'approve',proposal['challenge'])
     def test_rejected_decision_cannot_be_replayed(self):
-        eng,token=self.session('engineering-reviewer');proposal=self.copilot.propose_mandate(eng,token,self.mandate());result=self.copilot.decide(eng,token,proposal['decision_id'],'reject',proposal['reject_challenge']);self.assertEqual(result['outcome'],'reject')
-        with self.assertRaises(ValueError):self.copilot.decide(eng,token,proposal['decision_id'],'reject',proposal['reject_challenge'])
+        eng,token=self.session('engineering-reviewer');proposal=self.copilot.propose_mandate(eng,token,self.mandate());result=self.copilot.decide(eng,token,proposal['decision_id'],'reject',proposal['reject_challenge'],'objective is incomplete');self.assertEqual(result['outcome'],'reject')
+        with self.assertRaises(ValueError):self.copilot.decide(eng,token,proposal['decision_id'],'reject',proposal['reject_challenge'],'duplicate')
     def test_arbitrary_authorization_scope_is_rejected(self):
         eng,token=self.session('engineering-reviewer')
         with self.assertRaises(PermissionError):self.copilot.propose_authorization(eng,token,'deploy:invented')

@@ -55,6 +55,9 @@ def main():
     item.add_argument("--principal", required=True)
     item.add_argument("--credential-file", required=True)
     item.add_argument("--ttl", type=int, default=3600)
+    item = sub.add_parser("session-close", help="immediately revoke the current bearer session")
+    item.add_argument("--session", required=True)
+    item.add_argument("--token", required=True)
     item = sub.add_parser("turn", help="use the deterministic conversational workflow")
     item.add_argument("--session", required=True)
     item.add_argument("--token", required=True)
@@ -80,6 +83,14 @@ def main():
     item.add_argument("--decision-id", required=True)
     item.add_argument("--outcome", choices=["approve", "reject"], required=True)
     item.add_argument("--confirmation", required=True)
+    item.add_argument("--reason", help="required rationale when rejecting")
+    item = sub.add_parser("mandate-revoke", help="revoke an active autonomous engineering mandate")
+    item.add_argument("--session", required=True)
+    item.add_argument("--token", required=True)
+    item.add_argument("--run-id", required=True)
+    item.add_argument("--reason", required=True)
+    item.add_argument("--confirmation", required=True)
+    item.add_argument("--superseding-run-id")
     item = sub.add_parser("continue", help="continue an authorized autonomous run")
     item.add_argument("--session", required=True)
     item.add_argument("--token", required=True)
@@ -116,6 +127,8 @@ def main():
                 result = operator.status()
             elif args.command == "session-open":
                 result = operator.open_session(args.principal, Path(args.credential_file).read_text(), args.ttl)
+            elif args.command == "session-close":
+                result = operator.close_session(args.session, args.token)
             elif args.command == "turn":
                 result = operator.turn(args.session, args.token, args.message, _json(args.data_file) if args.data_file else None)
             elif args.command == "driver-register":
@@ -125,7 +138,9 @@ def main():
             elif args.command == "authorizations":
                 result = operator.prepare_authorizations(args.session, args.token, _json(args.evidence_file) if args.evidence_file else None)
             elif args.command == "decide":
-                result = operator.decide(args.session, args.token, args.decision_id, args.outcome, args.confirmation)
+                result = operator.decide(args.session, args.token, args.decision_id, args.outcome, args.confirmation, args.reason)
+            elif args.command == "mandate-revoke":
+                result = operator.revoke_mandate(args.session,args.token,args.run_id,args.reason,args.confirmation,args.superseding_run_id)
             else:
                 result = operator.continue_run(args.session, args.token, args.run_id)
         print(json.dumps(result, indent=2))

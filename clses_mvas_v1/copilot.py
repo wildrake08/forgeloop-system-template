@@ -30,6 +30,8 @@ class LifecycleCopilot:
         session=read(self.base/'sessions'/(session_id+'.json'))
         if session['status']!='active' or session['expires_at']<int(time.time()) or not secrets.compare_digest(session['token_sha256'],digest(token.encode())):raise PermissionError('invalid or expired copilot session')
         self.store.get(session['record_digest'],'copilot_session',session['role']);return session
+    def close_session(self,session_id,token):
+        session=self._session(session_id,token);payload={'session_id':session_id,'opened_session_record':session['record_digest'],'revoked_at':int(time.time()),'reason':'explicit holder termination'};record=self.store.commit('copilot_session_revoked',session['principal'],session['role'],'copilot_session_revocation',payload);write(self.base/'sessions'/(session_id+'.json'),{**session,'status':'revoked','revocation_record':record});return {'session_id':session_id,'state':'revoked','revocation_record':record}
 
     def _record_message(self,session,text,direction):
         actor=session['principal'] if direction=='human' else 'agent';role=session['role'] if direction=='human' else 'agent';payload={'session_id':session.get('session_id'),'direction':direction,'text':text,'authoritative':False,'recorded_at':int(time.time())};return self.store.commit('copilot_message_recorded',actor,role,'copilot_message',payload)
@@ -96,8 +98,8 @@ class LifecycleCopilot:
         workflow_path=self.store.state/'operator/workflow.json'
         if workflow_path.exists():
             baseline=read(workflow_path).get('intake',{}).get('baseline')
-            if baseline and baseline.get('decision')!='authorized':
-                excluded={'decision','authorization_digest','authorized_at','assumptions','resolved_facts'};basis={key:value for key,value in baseline.items() if key not in excluded};scopes['baseline:'+digest(basis)]={'kind':'product','subject':'system','purpose':'authorize exact minimum viable product baseline'}
+            if baseline and baseline.get('decision')=='proposed_not_authorized':
+                scopes['baseline:'+digest(self.engine.baseline_basis(baseline))]={'kind':'product','subject':'system','purpose':'authorize exact minimum viable product baseline'}
         runs=self.store.state/'autonomy-runs'
         for path in runs.glob('*.json') if runs.exists() else []:
             state=read(path)
@@ -121,6 +123,10 @@ class LifecycleCopilot:
         if scope not in expected:raise PermissionError('scope is not an active lifecycle authority request')
         if human_evidence is not None and not isinstance(human_evidence,dict):raise ValueError('human evidence must be an object')
         item=expected[scope];principal={'product':'owner','engineering':'engineering-reviewer','release':'release-owner'}[item['kind']];evidence={'scope':scope,'lifecycle':self.status(),'purpose':item['purpose'],'human_evidence':human_evidence or {}}
+        if scope.startswith('baseline:'):
+            workflow=read(self.store.state/'operator/workflow.json');baseline=workflow.get('intake',{}).get('baseline')
+            if not baseline or 'baseline:'+digest(self.engine.baseline_basis(baseline))!=scope:raise PermissionError('baseline changed before review packet preparation')
+            evidence['product_baseline']=baseline
         if scope.startswith('build:'):
             for run in evidence['lifecycle']['runs']:
                 if run.get('build_scope')==scope:
@@ -146,26 +152,35 @@ class LifecycleCopilot:
         if not isinstance(mandate['allowed_paths'],list) or not isinstance(mandate['requirements'],list):raise ValueError('mandate boundaries must be lists')
         return self._proposal('mandate',mandate,'engineering-reviewer','authorize bounded autonomous engineering mandate')
 
-    def decide(self,session_id,token,decision_id,outcome,confirmation):
+    def decide(self,session_id,token,decision_id,outcome,confirmation,reason=None):
         session=self._session(session_id,token);pointer_path=self.base/'decisions'/(decision_id+'.json');pointer=read(pointer_path)
         if pointer['status']!='proposed':raise ValueError('decision has already been resolved')
         proposal_record=self.store.get(pointer['proposal_record'],'copilot_decision_proposal','agent');proposal=proposal_record['payload']
         if session['principal']!=proposal['required_principal']:raise PermissionError('session principal lacks authority for this decision')
         if outcome not in ('approve','reject'):raise ValueError('outcome must be approve or reject')
+        if outcome=='reject' and (not isinstance(reason,str) or not reason.strip()):raise ValueError('rejection requires a nonempty rationale')
         required=proposal['challenge'] if outcome=='approve' else proposal['reject_challenge']
         if confirmation!=required:raise PermissionError('exact decision challenge was not confirmed')
-        decision_payload={'decision_id':decision_id,'proposal_digest':proposal['proposal_digest'],'outcome':outcome,'confirmation':confirmation,'decided_at':int(time.time())};decision_record=self.store.commit('copilot_decision_recorded',session['principal'],session['role'],'copilot_human_decision',decision_payload)
+        decision_payload={'decision_id':decision_id,'proposal_digest':proposal['proposal_digest'],'outcome':outcome,'confirmation':confirmation,'reason':reason.strip() if isinstance(reason,str) else None,'decided_at':int(time.time())};decision_record=self.store.commit('copilot_decision_recorded',session['principal'],session['role'],'copilot_human_decision',decision_payload)
         write(pointer_path,{'proposal_record':pointer['proposal_record'],'status':'processing','decision_record':decision_record})
         effect=None
         try:
             if outcome=='approve':
                 data=proposal['payload']
-                if proposal['kind']=='authorization':effect=self.engine.authorize(data['scope'],data['kind'],session['principal'],data['subject'])
+                if proposal['kind']=='authorization':
+                    if data['scope'] not in self._expected_scopes():raise PermissionError('authorization request is stale because lifecycle state changed')
+                    effect=self.engine.authorize(data['scope'],data['kind'],session['principal'],data['subject'])
                 elif proposal['kind']=='mandate':effect=self.engine.mandate(data['run_id'],data['objective'],data['driver'],data['allowed_paths'],data['requirements'],data['max_iterations'],data['max_changes'],data['max_bytes'],data['expires_at'],session['principal'])
                 else:raise ValueError('unsupported decision kind')
+            elif proposal['kind']=='authorization':
+                data=proposal['payload'];effect=self.engine.reject_authorization(data['scope'],data['kind'],data['subject'],session['principal'],proposal['proposal_digest'],reason)
             result={'decision_id':decision_id,'outcome':outcome,'decision_record':decision_record,'effect':effect};result_record=self.store.commit('copilot_decision_effect_recorded','agent','agent','copilot_decision_result',result);write(pointer_path,{'proposal_record':pointer['proposal_record'],'status':outcome,'decision_record':decision_record,'result_record':result_record});return result
         except Exception as exc:
             failure={'decision_id':decision_id,'outcome':outcome,'decision_record':decision_record,'effect':None,'error':str(exc)};result_record=self.store.commit('copilot_decision_effect_failed','agent','agent','copilot_decision_result',failure);write(pointer_path,{'proposal_record':pointer['proposal_record'],'status':'effect_failed','decision_record':decision_record,'result_record':result_record});raise RuntimeError('authorized decision effect failed: '+str(exc)) from exc
 
     def resume(self,session_id,token,run_id):
         self._session(session_id,token);result=AutonomousLoop(self.root).run(run_id);record=self.store.commit('copilot_run_resumed','agent','agent','copilot_run_result',{'run_id':run_id,'result':result,'recorded_at':int(time.time())});return {'result':result,'record_digest':record}
+    def revoke_mandate(self,session_id,token,run_id,reason,confirmation,superseding_run_id=None):
+        session=self._session(session_id,token)
+        if session['principal']!='engineering-reviewer':raise PermissionError('engineering-reviewer session required to revoke a mandate')
+        return self.engine.revoke_mandate(run_id,session['principal'],reason,confirmation,superseding_run_id)

@@ -34,7 +34,7 @@ def inventory(root,include_mutable=True):
 
 def generate_manifest(root,output=None):
     root=Path(root).resolve();output=Path(output) if output else root/DEFAULT_MANIFEST
-    entries=inventory(root);core={'format':FORMAT,'version':'4.6.1','entries':entries,'immutable_entries':[x for x in entries if not _mutable(x['path'])]}
+    entries=inventory(root);core={'format':FORMAT,'version':'4.6.2','entries':entries,'immutable_entries':[x for x in entries if not _mutable(x['path'])]}
     manifest={**core,'manifest_digest':digest(core)};write(output,manifest);return manifest
 
 def verify_scaffold(root,manifest=DEFAULT_MANIFEST,strict=True):
@@ -42,7 +42,7 @@ def verify_scaffold(root,manifest=DEFAULT_MANIFEST,strict=True):
     errors=[]
     try:
         value=read(path);core={k:value[k] for k in ('format','version','entries','immutable_entries')}
-        if value.get('format')!=FORMAT or value.get('version')!='4.6.1':errors.append('unsupported manifest format or version')
+        if value.get('format')!=FORMAT or value.get('version')!='4.6.2':errors.append('unsupported manifest format or version')
         if value.get('manifest_digest')!=digest(core):errors.append('manifest digest mismatch')
         expected=value['entries'] if strict else value['immutable_entries'];actual=inventory(root,include_mutable=strict)
         if expected!=actual:errors.append('repository inventory differs from the signed release scaffold')

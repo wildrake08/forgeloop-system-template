@@ -1,3 +1,4 @@
+import json
 import sys
 import tempfile
 import time
@@ -42,8 +43,8 @@ class GuidedOperatorTest(unittest.TestCase):
         opened = self.operator.open_session(principal, credential)
         return opened["session_id"], opened["token"]
 
-    def ready_intake(self):
-        return self.operator.begin("point-of-sale", {"facts": complete_facts()}, now=100)
+    def ready_intake(self, facts=None):
+        return self.operator.begin("point-of-sale", {"facts": facts or complete_facts()}, now=100)
 
     def authorize_baseline(self):
         owner, token = self.session("owner")
@@ -91,7 +92,7 @@ class GuidedOperatorTest(unittest.TestCase):
         self.authorize_baseline();proposal=self.operator.propose_mandate(session, token, self.mandate());self.assertEqual(proposal["kind"],"mandate")
 
     def test_baseline_authorization_is_exact_and_visible(self):
-        self.ready_intake();self.authorize_baseline();view=self.operator.status();self.assertEqual(view["current_step"],"authorize_engineering");self.assertEqual(view["intake"]["baseline"]["decision"],"authorized");self.assertRegex(view["intake"]["baseline"]["authorization_digest"],r"^[0-9a-f]{64}$")
+        self.ready_intake();owner,token=self.session("owner");packet=self.operator.prepare_authorizations(owner,token);self.assertEqual(packet["items"][0]["evidence"]["product_baseline"]["outcome_hypothesis"]["metric"],"checkout_time_seconds");item=packet["items"][0];self.operator.decide(owner,token,item["decision_id"],"approve",item["approve_exactly"]);view=self.operator.status();self.assertEqual(view["current_step"],"authorize_engineering");baseline=view["intake"]["baseline"];self.assertEqual(baseline["decision"],"authorized");self.assertRegex(baseline["authorization_digest"],r"^[0-9a-f]{64}$");self.assertEqual(self.operator.engine._spec()[1]["outcomes"][0]["key"],"checkout_time_seconds");self.assertEqual(self.operator.engine._spec()[1]["outcomes"][0]["op"],"<=")
 
     def test_mandate_is_blocked_until_intake_is_complete(self):
         self.operator.begin("point-of-sale", now=100)
@@ -121,7 +122,7 @@ class GuidedOperatorTest(unittest.TestCase):
         self.assertEqual(before, after)
 
     def test_release_requests_are_consolidated_but_decided_separately(self):
-        self.ready_intake()
+        facts=complete_facts();facts.update({"outcome_metric":"health_rate","outcome_unit":"ratio","outcome_operator":">=","outcome_target":1.0,"outcome_baseline":0.0});self.ready_intake(facts)
         self.authorize_baseline()
         script = "import json;print(json.dumps({'status':'done','summary':'tests pass','changes':[]}))"
         owner, owner_token = self.session("owner")
@@ -169,6 +170,14 @@ class GuidedOperatorTest(unittest.TestCase):
         release, token = self.session("release-owner")
         with self.assertRaises(ValueError):
             self.operator.prepare_authorizations(release, token)
+
+    def test_rejected_build_scope_is_enforced_and_requests_revision(self):
+        facts=complete_facts();facts.update({"outcome_metric":"health_rate","outcome_unit":"ratio","outcome_operator":">=","outcome_target":1.0,"outcome_baseline":0.0});self.ready_intake(facts);self.authorize_baseline()
+        script="import json;print(json.dumps({'status':'done','summary':'tests pass','changes':[]}))";owner,owner_token=self.session("owner");self.operator.register_driver(owner,owner_token,"guided-driver","generic",[sys.executable,"-c",script,"{prompt}"])
+        eng,token=self.session("engineering-reviewer");mandate=self.operator.propose_mandate(eng,token,self.mandate());self.operator.decide(eng,token,mandate["decision_id"],"approve",mandate["challenge"]);self.operator.continue_run(eng,token,"guided-run")
+        packet=self.operator.prepare_authorizations(eng,token);item=packet["items"][0];rejected=self.operator.decide(eng,token,item["decision_id"],"reject",item["reject_exactly"],"missing adversarial coverage")
+        self.assertEqual(rejected["effect"]["state"],"rejected");state=json.loads((self.root/".clses-v1/autonomy-runs/guided-run.json").read_text());self.assertEqual(state["phase"],"changes_requested");self.assertFalse(any(x["scope"]==item["scope"] for x in self.operator.status()["authorization_requests"]))
+        with self.assertRaisesRegex(PermissionError,"rejected"):self.operator.engine.authorize(item["scope"],"engineering","engineering-reviewer","agent")
 
     def test_duplicate_workflow_is_rejected(self):
         self.operator.begin("point-of-sale", now=100)

@@ -1,4 +1,4 @@
-# CLSES GitHub Template Edition v4.6.1
+# CLSES GitHub Template Edition v4.6.2
 
 This directory is a safe, self-contained GitHub **Use this template** repository for starting a governed software system. Version 4.6 adds exact scaffold adoption, a digest-bound embedded kernel, least-privilege CI with immutable action references, starter source/tests, GitHub contribution surfaces, secret exclusions, dependency hashes, and copied-repository tests. Start with `GITHUB_TEMPLATE_GUIDE.md`.
 
@@ -20,7 +20,9 @@ Version 4.5 adds three guided onboarding templates, read-only secret-safe enviro
 
 Version 4.6 makes that system usable as a GitHub template without weakening empty-repository initialization. A copied non-empty repository is adopted only through its exact release manifest; ordinary non-empty directories are still refused.
 
-Version 4.6.1 is the corrective release informed by a real coffee-cart POS cycle. It inserts an exact owner-signed product-baseline gate before engineering, replaces deferred architecture and language assumptions with execution evidence, reports a closed cycle as fully completed with monitoring active, includes trial transcripts and digests in build review packets, returns actionable external-agent failures, safely ignores only an allowlist of local development artifacts during scaffold adoption, and requires two distinct passing outcome periods for a production verdict.
+Version 4.6.1 was the first corrective release informed by a real coffee-cart POS cycle. It inserted the product-baseline gate, truthful monitoring status, trial evidence, actionable external-agent failures, safe local-artifact exclusions, and sustained production-outcome evidence.
+
+Version 4.6.2 closes the remaining trial-discovered control gaps. The exact owner-authorized baseline is now projected into and cryptographically bound to the active executable specification, including its real outcome operator, unit, target, beneficiaries, and operating conditions. Authorization packets show the full product baseline. Rejections require rationale, prohibit approval of the unchanged scope, and return engineering to a governed revision state. Bearer sessions and active mandates have explicit authenticated revocation operations. Agent instructions prohibit reflection or persistence of raw sensitive values, payment obligations add a specification constraint, and unsupported outcome measurements stop local closure until a criterion-specific production evidence adapter is supplied.
 
 Run `/opt/homebrew/bin/python3 build.py` (or another Python 3.10+ environment with the declared dependencies) to execute the full suite and live governed lifecycle, issue signed package evidence, and replay the independent verification. Distribution checksums remain the release-package trust anchor; the public key embedded in the assessment proves internal integrity but not publisher identity. See `COPILOT_GUIDE.md` for the conversational workflow and `PRODUCTION_PROFILE.md` for target-environment verification.
 

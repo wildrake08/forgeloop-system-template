@@ -5,7 +5,8 @@
   "properties": {
     "format": {"const": "CLSES-minimum-viable-baseline/v1"}, "system_id": {"type": "string", "minLength": 1}, "system_name": {"type": "string", "minLength": 1}, "system_class": {"type": "string", "minLength": 1},
     "need": {"type": ["string", "null"]}, "purpose": {"type": ["string", "null"]}, "beneficiaries": {"type": "array"}, "outcome_hypothesis": {"type": ["object", "null"]},
-    "data_classes": {"type": "array"}, "compliance_obligations": {"type": "array"}, "operating_conditions": {"type": "object"}, "authorities": {"type": "object"}, "profiles": {"type": "array"}, "assumptions": {"type": "array"}, "resolved_facts": {"type": "object"}, "decision": {"enum": ["proposed_not_authorized", "authorized"]},
-    "authorization_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "authorized_at": {"type": "integer", "minimum": 0}
+    "data_classes": {"type": "array"}, "compliance_obligations": {"type": "array"}, "operating_conditions": {"type": "object"}, "authorities": {"type": "object"}, "profiles": {"type": "array"}, "assumptions": {"type": "array"}, "resolved_facts": {"type": "object"}, "decision": {"enum": ["proposed_not_authorized", "authorized", "rejected"]},
+    "authorization_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "authorized_at": {"type": "integer", "minimum": 0},
+    "specification_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "binding_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "rejection": {"type": "object"}
   }
 }

@@ -34,7 +34,7 @@ clses-operator --root ./coffee-pos status
 clses-operator --root ./coffee-pos answer --file intake-answers.json
 ```
 
-The resulting minimum viable baseline remains `proposed_not_authorized`. An authenticated `owner` must use `authorizations` and the exact decision challenge to authorize that digest-bound product baseline. Mandate preparation fails closed until this product decision exists. Product-baseline authorization does not authorize engineering, release, or deployment.
+The resulting minimum viable baseline remains `proposed_not_authorized`. An authenticated `owner` must use `authorizations` and the exact decision challenge to authorize that digest-bound product baseline. The packet displays the full baseline, not only its digest. Approval binds its product purpose, beneficiaries, outcome criterion, and operating conditions into the active executable specification. Mandate preparation fails closed until both authorization and exact binding exist. Product-baseline authorization does not authorize engineering, release, or deployment.
 
 ## Authenticate and prepare work
 
@@ -61,6 +61,8 @@ clses-operator --root ./coffee-pos continue \
 ```
 
 An owner registers the chosen execution agent once through the same surface with `driver-register`. `--kind codex` uses the built-in adapter; `--kind generic` accepts a JSON argument array containing `{prompt}`.
+
+Reject decisions with `--reason "..."`. Rejection is enforced: the unchanged scope cannot later be approved, and an affected engineering run returns to revision with the rationale in its agent context. End an exposed bearer session immediately with `session-close`. Revoke an active engineering mandate with `mandate-revoke`, a nonempty reason, and the exact `REVOKE RUN_ID MANDATE_DIGEST` confirmation; use a new run identity for any superseding mandate.
 
 ## Consolidated authorization review
 

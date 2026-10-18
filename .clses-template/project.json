@@ -1,0 +1,9 @@
+{
+  "format": "CLSES-template-project/v1",
+  "kernel_version": "4.6.0",
+  "default_profile": "base-production",
+  "application_source_roots": ["src"],
+  "application_test_roots": ["tests"],
+  "human_authority_is_non_autonomous": true,
+  "first_run": "python -m clses_mvas_v1.template_edition bootstrap"
+}

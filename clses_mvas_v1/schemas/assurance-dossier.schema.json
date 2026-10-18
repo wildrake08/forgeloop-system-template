@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.org/clses/v3/assurance-dossier.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "system", "profile", "artifacts", "relations", "adapters", "evidence", "decisions", "changes", "deployment", "outcome_evaluations", "continuation", "closure", "assessed_at"],
+  "properties": {
+    "format": {"const": "CLSES-assurance-dossier/v1"},
+    "system": {"type": "object", "additionalProperties": false, "required": ["id", "class", "purpose", "need", "beneficiaries", "outcome_hypotheses", "operating_conditions"], "properties": {"id": {"type": "string", "minLength": 1}, "class": {"type": "string", "minLength": 1}, "purpose": {"type": "string", "minLength": 1}, "need": {"type": "string", "minLength": 1}, "beneficiaries": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true}, "outcome_hypotheses": {"type": "array", "minItems": 1}, "operating_conditions": {"type": "object", "minProperties": 1}}},
+    "profile": {"type": "object"},
+    "artifacts": {"type": "array", "minItems": 1}, "relations": {"type": "array"}, "adapters": {"type": "array", "minItems": 1},
+    "evidence": {"type": "array", "minItems": 1}, "decisions": {"type": "array", "minItems": 1}, "changes": {"type": "array"},
+    "deployment": {"type": "object"}, "outcome_evaluations": {"type": "array", "minItems": 1}, "continuation": {"type": "object"}, "closure": {"type": "object"}, "assessed_at": {"type": "integer", "minimum": 0}
+  }
+}

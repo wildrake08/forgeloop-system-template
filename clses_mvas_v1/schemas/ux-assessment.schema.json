@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v4.5/ux-assessment.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "quality_assessment", "ux_context", "criterion_scopes", "research_ethics"],
+  "properties": {
+    "format": {"const": "CLSES-ux-assessment/v1"},
+    "quality_assessment": {"type": "object"},
+    "ux_context": {
+      "type": "object", "additionalProperties": false,
+      "required": ["population_ids", "journey_ids", "operating_context_ids", "instrument_ids"],
+      "properties": {
+        "population_ids": {"$ref": "#/$defs/nonempty_unique_strings"},
+        "journey_ids": {"$ref": "#/$defs/nonempty_unique_strings"},
+        "operating_context_ids": {"$ref": "#/$defs/nonempty_unique_strings"},
+        "instrument_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+      }
+    },
+    "criterion_scopes": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["criterion_id", "population_ids", "journey_ids", "operating_context_ids", "instrument_id", "sample_size", "evidence_digest"],
+        "properties": {
+          "criterion_id": {"type": "string", "pattern": "^ux-"},
+          "population_ids": {"$ref": "#/$defs/nonempty_unique_strings"},
+          "journey_ids": {"$ref": "#/$defs/nonempty_unique_strings"},
+          "operating_context_ids": {"$ref": "#/$defs/nonempty_unique_strings"},
+          "instrument_id": {"type": ["string", "null"], "minLength": 1},
+          "sample_size": {"type": "integer", "minimum": 1},
+          "evidence_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "research_ethics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["consent_basis", "privacy_review_ref", "recruitment_limitations", "approved_by", "approved_at"],
+      "properties": {
+        "consent_basis": {"type": "string", "minLength": 1},
+        "privacy_review_ref": {"type": "string", "minLength": 1},
+        "recruitment_limitations": {"type": "string", "minLength": 1},
+        "approved_by": {"type": "string", "minLength": 1},
+        "approved_at": {"type": "integer", "minimum": 0}
+      }
+    }
+  },
+  "$defs": {
+    "nonempty_unique_strings": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "format": "CLSES-lifecycle-profile/v1",
+  "profile_id": "point-of-sale",
+  "version": "1.0.0",
+  "extends": ["ux-engineering"],
+  "system_classes": ["point-of-sale"],
+  "domains": [],
+  "required_edges": [],
+  "controls": [
+    {"id": "payment-integrity", "domain": "verification", "objective": "Totals, taxes, tenders, refunds, and receipts preserve transaction integrity", "evidence_types": ["pos_transaction_test"], "authority_role": "quality_authority", "max_age_seconds": 604800},
+    {"id": "payment-data-boundary", "domain": "security_privacy", "objective": "Payment data is minimized and delegated to the approved payment boundary", "evidence_types": ["payment_data_assessment"], "authority_role": "security_authority", "max_age_seconds": 604800},
+    {"id": "offline-reconciliation", "domain": "resilience", "objective": "Permitted offline behavior and reconciliation are demonstrated", "evidence_types": ["offline_reconciliation_test"], "authority_role": "resilience_authority", "max_age_seconds": 2592000}
+  ]
+}

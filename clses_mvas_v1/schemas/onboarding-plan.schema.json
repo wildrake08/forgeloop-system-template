@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.org/clses/v4.5/onboarding-plan.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "template", "profile", "facts", "missing_inputs", "accepted_discovery_digest", "status", "authority_effect"],
+  "properties": {
+    "format": {"const": "CLSES-onboarding-plan/v1"},
+    "template": {"type": "object", "additionalProperties": false, "required": ["id", "version", "digest"], "properties": {"id": {"type": "string"}, "version": {"type": "string"}, "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "profile": {"type": "string", "minLength": 1}, "facts": {"type": "object"},
+    "missing_inputs": {"type": "array", "items": {"type": "object"}},
+    "accepted_discovery_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["needs_human_input", "ready_to_begin"]}, "authority_effect": {"const": "none; this plan prepares non-authoritative intake context only"}
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "format": "CLSES-lifecycle-profile/v1",
+  "profile_id": "software-quality",
+  "version": "1.0.0",
+  "extends": ["base-production"],
+  "system_classes": ["general"],
+  "domains": [],
+  "required_edges": [],
+  "controls": [
+    {"id": "quality-functional-completeness", "domain": "verification", "objective": "All accepted functional requirements have verified behavior", "evidence_types": ["functional_coverage_test"], "authority_role": "quality_authority", "max_age_seconds": 604800},
+    {"id": "quality-functional-correctness", "domain": "verification", "objective": "Observed incorrect results remain within the explicitly accepted limit", "evidence_types": ["correctness_test"], "authority_role": "quality_authority", "max_age_seconds": 604800},
+    {"id": "quality-response-time", "domain": "verification", "objective": "Representative response time satisfies the declared percentile target under declared load", "evidence_types": ["performance_test"], "authority_role": "quality_authority", "max_age_seconds": 604800},
+    {"id": "quality-capacity", "domain": "operations", "objective": "Sustained capacity satisfies the declared workload and headroom target", "evidence_types": ["capacity_test"], "authority_role": "operations_authority", "max_age_seconds": 604800},
+    {"id": "quality-interface-conformance", "domain": "verification", "objective": "Declared interfaces conform to their versioned contracts", "evidence_types": ["contract_test"], "authority_role": "quality_authority", "max_age_seconds": 604800},
+    {"id": "quality-coexistence", "domain": "operations", "objective": "Resource and configuration interference remains within the accepted limit", "evidence_types": ["coexistence_test"], "authority_role": "operations_authority", "max_age_seconds": 604800},
+    {"id": "quality-operability", "domain": "verification", "objective": "Representative users complete critical tasks successfully", "evidence_types": ["usability_test"], "authority_role": "product_authority", "max_age_seconds": 2592000},
+    {"id": "quality-accessibility", "domain": "verification", "objective": "The user interface meets the declared accessibility conformance target", "evidence_types": ["accessibility_assessment"], "authority_role": "product_authority", "max_age_seconds": 2592000},
+    {"id": "quality-availability", "domain": "operations", "objective": "Observed service availability satisfies the declared service objective", "evidence_types": ["reliability_observation"], "authority_role": "operations_authority", "max_age_seconds": 86400},
+    {"id": "quality-recoverability", "domain": "resilience", "objective": "Recovery completes within the declared recovery-time objective without unacceptable loss", "evidence_types": ["recovery_quality_test"], "authority_role": "resilience_authority", "max_age_seconds": 2592000},
+    {"id": "quality-integrity", "domain": "security_privacy", "objective": "Security-relevant integrity violations remain within the explicitly accepted limit", "evidence_types": ["integrity_security_test"], "authority_role": "security_authority", "max_age_seconds": 604800},
+    {"id": "quality-confidentiality", "domain": "security_privacy", "objective": "Confidentiality violations remain within the explicitly accepted limit", "evidence_types": ["confidentiality_assessment"], "authority_role": "security_authority", "max_age_seconds": 604800},
+    {"id": "quality-analyzability", "domain": "architecture", "objective": "Diagnostic evidence identifies the cause of representative failures", "evidence_types": ["diagnostic_assessment"], "authority_role": "engineering_authority", "max_age_seconds": 2592000},
+    {"id": "quality-testability", "domain": "verification", "objective": "Automated verification covers the accepted change and regression surface", "evidence_types": ["testability_assessment"], "authority_role": "quality_authority", "max_age_seconds": 604800},
+    {"id": "quality-adaptability", "domain": "architecture", "objective": "The system works across the declared supported environments", "evidence_types": ["portability_test"], "authority_role": "engineering_authority", "max_age_seconds": 2592000},
+    {"id": "quality-replaceability", "domain": "architecture", "objective": "A declared replaceable dependency can be substituted without violating its contract", "evidence_types": ["replaceability_test"], "authority_role": "architecture_authority", "max_age_seconds": 2592000},
+    {"id": "quality-fail-safe", "domain": "resilience", "objective": "Unsafe failure scenarios reach a declared safe state", "evidence_types": ["fail_safe_test"], "authority_role": "safety_authority", "max_age_seconds": 604800},
+    {"id": "quality-hazard-control", "domain": "governance", "objective": "No identified unacceptable hazard remains without verified control", "evidence_types": ["hazard_analysis"], "authority_role": "safety_authority", "max_age_seconds": 2592000}
+  ]
+}

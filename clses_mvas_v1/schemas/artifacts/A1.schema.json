@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v0.3.1/A1.schema.json",
+  "title": "A1 Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "beneficiaries": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "variable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "op": {
+            "enum": [
+              ">=",
+              ">",
+              "<=",
+              "<",
+              "==",
+              "!="
+            ]
+          },
+          "threshold": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key",
+          "variable",
+          "op",
+          "threshold",
+          "unit"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "horizon": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "type": "integer"
+        },
+        "end": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "authority_source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "context": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "purpose",
+    "beneficiaries",
+    "outcomes",
+    "horizon",
+    "authority_source",
+    "context"
+  ]
+}

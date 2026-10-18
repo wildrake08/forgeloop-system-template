@@ -1,0 +1,13 @@
+{
+  "format": "CLSES-lifecycle-profile/v1",
+  "profile_id": "saas",
+  "version": "1.0.0",
+  "extends": ["ux-engineering"],
+  "system_classes": ["saas"],
+  "domains": [],
+  "required_edges": [],
+  "controls": [
+    {"id": "tenant-isolation", "domain": "security_privacy", "objective": "Tenant data and authority boundaries resist cross-tenant access", "evidence_types": ["tenant_isolation_test"], "authority_role": "security_authority", "max_age_seconds": 604800},
+    {"id": "capacity-scalability", "domain": "operations", "objective": "Capacity and scaling satisfy declared load conditions", "evidence_types": ["load_test"], "authority_role": "operations_authority", "max_age_seconds": 604800}
+  ]
+}

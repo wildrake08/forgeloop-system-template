@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v3/lifecycle-profile.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "profile_id", "version", "extends", "system_classes", "domains", "required_edges", "controls"],
+  "properties": {
+    "format": {"const": "CLSES-lifecycle-profile/v1"},
+    "profile_id": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "extends": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "system_classes": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
+    "domains": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "required_edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}},
+    "controls": {"type": "array", "items": {"$ref": "#/$defs/control"}}
+  },
+  "$defs": {
+    "edge": {"type": "object", "additionalProperties": false, "required": ["from", "to", "type"], "properties": {"from": {"type": "string", "minLength": 1}, "to": {"type": "string", "minLength": 1}, "type": {"type": "string", "minLength": 1}}},
+    "control": {"type": "object", "additionalProperties": false, "required": ["id", "domain", "objective", "evidence_types", "authority_role", "max_age_seconds"], "properties": {"id": {"type": "string", "minLength": 1}, "domain": {"type": "string", "minLength": 1}, "objective": {"type": "string", "minLength": 1}, "evidence_types": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true}, "authority_role": {"type": "string", "minLength": 1}, "max_age_seconds": {"type": "integer", "minimum": 1}}}
+  }
+}

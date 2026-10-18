@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.org/clses/v3/adapter-request.schema.json",
+  "type": "object", "additionalProperties": false, "required": ["format", "request_id", "system_id", "environment_id", "control_id", "artifact_id", "evidence_type", "inputs", "deadline"],
+  "properties": {"format": {"const": "CLSES-adapter-request/v1"}, "request_id": {"type": "string", "minLength": 1}, "system_id": {"type": "string", "minLength": 1}, "environment_id": {"type": "string", "minLength": 1}, "control_id": {"type": "string", "minLength": 1}, "artifact_id": {"type": "string", "minLength": 1}, "evidence_type": {"type": "string", "minLength": 1}, "inputs": {"type": "object"}, "deadline": {"type": "integer", "minimum": 0}}
+}

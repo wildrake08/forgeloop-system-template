@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v0.3.1/A6.schema.json",
+  "title": "A6 Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "criterion_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ]
+    },
+    "criterion_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "measurement_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "measurement_unit": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "variable",
+        "measurement_key",
+        "measurement_unit"
+      ]
+    },
+    "minimum_sources": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "max_age": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "min_coverage": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "required": [
+    "criterion_ref",
+    "criterion_key",
+    "bindings",
+    "minimum_sources",
+    "max_age",
+    "min_coverage"
+  ]
+}

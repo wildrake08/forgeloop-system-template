@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clses-general-assurance-kernel"
+version = "4.6.0"
+description = "Safe self-contained GitHub template for governed closed-loop software engineering"
+requires-python = ">=3.10"
+dependencies = ["jsonschema>=4.18,<5"]
+
+[project.scripts]
+clses-v1 = "clses_mvas_v1.cli:main"
+clses-v1-validate = "clses_mvas_v1.validator:main"
+clses-copilot = "clses_mvas_v1.copilot_cli:main"
+clses-production-verify = "clses_mvas_v1.production:main"
+clses-assure = "clses_mvas_v1.assurance:main"
+clses-intake = "clses_mvas_v1.intake:main"
+clses-operator = "clses_mvas_v1.operator_cli:main"
+clses-quality = "clses_mvas_v1.quality:main"
+clses-ux = "clses_mvas_v1.ux:main"
+clses-operator-ui = "clses_mvas_v1.visual_operator:main"
+clses-adapters = "clses_mvas_v1.production_adapters:main"
+clses-template = "clses_mvas_v1.template_edition:main"
+
+[tool.setuptools.packages.find]
+include = ["clses_mvas_v1*"]
+
+[tool.setuptools.package-data]
+clses_mvas_v1 = ["schemas/*.json", "schemas/artifacts/*.json", "profiles/*.json", "quality_profiles/*.json", "onboarding_templates/*.json", "adapter_templates/*.json", "operator_ui/*.html", "operator_ui/*.css", "operator_ui/*.js"]

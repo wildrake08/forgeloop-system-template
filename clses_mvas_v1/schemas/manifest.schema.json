@@ -1,0 +1,115 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "spec_version": {
+      "const": "0.3.1"
+    },
+    "system_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assessed_at": {
+      "type": "integer"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "A1",
+              "A2",
+              "A3",
+              "A4",
+              "A5",
+              "A6",
+              "A7",
+              "A8"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1
+          },
+          "payload": {
+            "type": "object"
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "version": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "id",
+                "version"
+              ]
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "supersedes": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": { "type": "string", "minLength": 1 },
+                  "version": { "type": "integer", "minimum": 1 }
+                },
+                "required": ["id", "version"]
+              },
+              { "type": "null" }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "subject",
+          "payload",
+          "references",
+          "supersedes"
+        ],
+        "allOf": [
+          {
+            "if": { "properties": { "version": { "const": 1 } } },
+            "then": { "properties": { "supersedes": { "type": "null" } } },
+            "else": { "properties": { "supersedes": { "type": "object" } } }
+          }
+        ]
+      },
+      "minItems": 8,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "spec_version",
+    "system_id",
+    "assessed_at",
+    "artifacts"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v0.3.1/manifest.schema.json"
+}

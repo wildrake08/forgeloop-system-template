@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v0.3.1/A5.schema.json",
+  "title": "A5 Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "design_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["id", "version"]
+    },
+    "source_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "build_digest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "configuration_digest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "deployment": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "environment": {
+              "type": "string",
+              "minLength": 1
+            },
+            "release_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "deployed_at": {
+              "type": "integer"
+            },
+            "production_authorization_ref": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "version": { "type": "integer", "minimum": 1 }
+              },
+              "required": ["id", "version"]
+            }
+          },
+          "required": [
+            "environment",
+            "release_id",
+            "deployed_at",
+            "production_authorization_ref"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "design_ref",
+    "source_revision",
+    "build_digest",
+    "configuration_digest",
+    "deployment"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.org/clses/v4.5/production-observation.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "producer_id", "system_id", "environment_id", "artifact_id", "evidence_type", "passed", "measurements", "observed_at", "expires_at"],
+  "properties": {
+    "format": {"const": "CLSES-production-observation/v1"}, "producer_id": {"type": "string", "minLength": 1},
+    "system_id": {"type": "string", "minLength": 1}, "environment_id": {"type": "string", "minLength": 1}, "artifact_id": {"type": "string", "minLength": 1},
+    "evidence_type": {"type": "string", "minLength": 1}, "passed": {"const": true}, "measurements": {"type": "object", "minProperties": 1},
+    "observed_at": {"type": "integer", "minimum": 0}, "expires_at": {"type": "integer", "minimum": 0}
+  }
+}

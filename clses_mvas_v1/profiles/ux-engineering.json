@@ -1,0 +1,32 @@
+{
+  "format": "CLSES-lifecycle-profile/v1",
+  "profile_id": "ux-engineering",
+  "version": "1.0.0",
+  "extends": ["software-quality"],
+  "system_classes": ["interactive-software"],
+  "domains": [],
+  "required_edges": [],
+  "controls": [
+    {"id": "ux-user-research-coverage", "domain": "intent", "objective": "Validated research covers the declared critical user segments", "evidence_types": ["user_research_assessment"], "authority_role": "ux_authority", "max_age_seconds": 7776000},
+    {"id": "ux-context-validation", "domain": "intent", "objective": "Research and evaluation cover the declared material operating contexts", "evidence_types": ["contextual_inquiry_assessment"], "authority_role": "ux_authority", "max_age_seconds": 7776000},
+    {"id": "ux-critical-journey-success", "domain": "verification", "objective": "Representative users successfully complete declared critical journeys", "evidence_types": ["moderated_usability_test"], "authority_role": "product_authority", "max_age_seconds": 2592000},
+    {"id": "ux-error-free-completion", "domain": "verification", "objective": "Critical journeys complete without assistance or material user error", "evidence_types": ["task_effectiveness_test"], "authority_role": "ux_authority", "max_age_seconds": 2592000},
+    {"id": "ux-time-on-task", "domain": "verification", "objective": "Representative completion time for critical journeys remains within the accepted limit", "evidence_types": ["task_efficiency_test"], "authority_role": "product_authority", "max_age_seconds": 2592000},
+    {"id": "ux-cognitive-load", "domain": "verification", "objective": "Reported cognitive load for critical journeys remains within the accepted instrument score", "evidence_types": ["cognitive_walkthrough_assessment"], "authority_role": "ux_authority", "max_age_seconds": 2592000},
+    {"id": "ux-first-use-success", "domain": "verification", "objective": "Representative first-time users complete the declared onboarding journey", "evidence_types": ["learnability_test"], "authority_role": "ux_authority", "max_age_seconds": 2592000},
+    {"id": "ux-time-to-proficiency", "domain": "verification", "objective": "Intended users reach declared proficient performance within the accepted time", "evidence_types": ["proficiency_study"], "authority_role": "product_authority", "max_age_seconds": 7776000},
+    {"id": "ux-preventable-error-rate", "domain": "verification", "objective": "Preventable user errors in critical journeys remain within the accepted limit", "evidence_types": ["error_analysis"], "authority_role": "ux_authority", "max_age_seconds": 2592000},
+    {"id": "ux-error-recovery-success", "domain": "resilience", "objective": "Representative users recover successfully from declared material error states", "evidence_types": ["error_recovery_test"], "authority_role": "quality_authority", "max_age_seconds": 2592000},
+    {"id": "ux-findability", "domain": "verification", "objective": "Representative users locate critical information and actions successfully", "evidence_types": ["findability_test"], "authority_role": "ux_authority", "max_age_seconds": 2592000},
+    {"id": "ux-navigation-dead-ends", "domain": "verification", "objective": "Critical journeys contain no unaccepted navigation dead ends", "evidence_types": ["journey_inspection"], "authority_role": "ux_authority", "max_age_seconds": 604800},
+    {"id": "ux-critical-decision-comprehension", "domain": "governance", "objective": "Representative users correctly understand consequential choices before acting", "evidence_types": ["comprehension_test"], "authority_role": "product_authority", "max_age_seconds": 2592000},
+    {"id": "ux-user-control-coverage", "domain": "governance", "objective": "Consequential actions provide required confirmation, cancellation, reversal, or recourse", "evidence_types": ["user_control_assessment"], "authority_role": "product_authority", "max_age_seconds": 604800},
+    {"id": "ux-satisfaction", "domain": "verification", "objective": "Post-task satisfaction meets the declared score using the named instrument", "evidence_types": ["satisfaction_study"], "authority_role": "product_authority", "max_age_seconds": 2592000},
+    {"id": "ux-journey-abandonment", "domain": "operations", "objective": "Preventable abandonment of critical journeys remains within the accepted limit", "evidence_types": ["experience_analytics"], "authority_role": "product_authority", "max_age_seconds": 604800},
+    {"id": "ux-assistive-technology-success", "domain": "verification", "objective": "Users of declared assistive technologies complete critical journeys successfully", "evidence_types": ["assistive_technology_test"], "authority_role": "accessibility_authority", "max_age_seconds": 2592000},
+    {"id": "ux-localized-journey-success", "domain": "verification", "objective": "Representative users complete critical journeys in every declared supported locale", "evidence_types": ["localization_usability_test"], "authority_role": "localization_authority", "max_age_seconds": 2592000},
+    {"id": "ux-deceptive-patterns", "domain": "governance", "objective": "No unaccepted deceptive or coercive interaction pattern is present", "evidence_types": ["ethical_interaction_review"], "authority_role": "ethics_authority", "max_age_seconds": 2592000},
+    {"id": "ux-ai-decision-understanding", "domain": "governance", "objective": "Affected users understand the role, limits, and consequences of AI-mediated behavior", "evidence_types": ["ai_interaction_comprehension_test"], "authority_role": "ai_governance_authority", "max_age_seconds": 2592000},
+    {"id": "ux-ai-recourse-success", "domain": "governance", "objective": "Affected users can exercise declared correction, override, escalation, or appeal paths", "evidence_types": ["ai_recourse_test"], "authority_role": "ai_governance_authority", "max_age_seconds": 2592000}
+  ]
+}

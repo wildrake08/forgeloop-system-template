@@ -1,0 +1,20 @@
+{
+  "format": "CLSES-onboarding-template/v1", "id": "general-interactive", "version": "1.0.0",
+  "title": "General interactive software", "description": "Start an interactive system with production, software-quality, and UX assurance.",
+  "profile": "ux-engineering", "starter_facts": {"system_class": "interactive-software"},
+  "inputs": [
+    {"fact_id": "system_name", "label": "System name", "help": "A short name people will recognize.", "value_type": "string", "required": true},
+    {"fact_id": "problem", "label": "Problem to solve", "help": "Describe the human problem the software should address.", "value_type": "string", "required": true},
+    {"fact_id": "beneficiaries", "label": "Who benefits", "help": "List the intended beneficiary groups.", "value_type": "string_list", "required": true},
+    {"fact_id": "outcome_statement", "label": "Desired outcome", "help": "State the observable improvement sought.", "value_type": "string", "required": true},
+    {"fact_id": "outcome_metric", "label": "Outcome metric", "help": "Name the measurement used to judge the outcome.", "value_type": "string", "required": true},
+    {"fact_id": "outcome_unit", "label": "Metric unit", "help": "Name the metric unit.", "value_type": "string", "required": true},
+    {"fact_id": "outcome_operator", "label": "Target comparison", "help": "Use >=, >, <=, <, or ==.", "value_type": "string", "required": true},
+    {"fact_id": "outcome_target", "label": "Target", "help": "Set the human-approved outcome target.", "value_type": "number", "required": true},
+    {"fact_id": "outcome_baseline", "label": "Current baseline", "help": "Record the current measured baseline.", "value_type": "number", "required": true},
+    {"fact_id": "data_classes", "label": "Data handled", "help": "List material data classes.", "value_type": "string_list", "required": true},
+    {"fact_id": "compliance_obligations", "label": "External obligations", "help": "List legal, regulatory, and contractual obligations.", "value_type": "string_list", "required": true},
+    {"fact_id": "operating_conditions", "label": "Operating conditions", "help": "Describe devices, locations, load, dependencies, and support expectations.", "value_type": "object", "required": true},
+    {"fact_id": "authorities", "label": "Human authorities", "help": "Assign a person to every required authority role.", "value_type": "object", "required": true}
+  ]
+}

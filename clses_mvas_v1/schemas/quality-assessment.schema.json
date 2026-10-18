@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v4.5/quality-assessment.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "assessment_id", "system_id", "profile", "context_tags", "environment_id", "criteria_decisions", "observations", "tradeoffs", "assessed_at"],
+  "properties": {
+    "format": {"const": "CLSES-quality-assessment/v1"}, "assessment_id": {"type": "string", "minLength": 1}, "system_id": {"type": "string", "minLength": 1},
+    "profile": {"type": "object", "additionalProperties": false, "required": ["profile_id", "version", "composed_digest"], "properties": {"profile_id": {"type": "string"}, "version": {"type": "string"}, "composed_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "context_tags": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}, "environment_id": {"type": "string", "minLength": 1},
+    "criteria_decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}}, "observations": {"type": "array", "items": {"$ref": "#/$defs/observation"}},
+    "tradeoffs": {"type": "array", "items": {"$ref": "#/$defs/tradeoff"}}, "assessed_at": {"type": "integer", "minimum": 0}
+  },
+  "$defs": {
+    "decision": {"type": "object", "additionalProperties": false, "required": ["criterion_id", "applicable", "rationale", "operator", "threshold", "unit", "authority", "authority_role", "decided_at", "tradeoff_refs"], "properties": {
+      "criterion_id": {"type": "string", "minLength": 1}, "applicable": {"type": "boolean"}, "rationale": {"type": "string", "minLength": 1}, "operator": {"type": ["string", "null"]}, "threshold": {"type": ["number", "null"]}, "unit": {"type": ["string", "null"]}, "authority": {"type": "string", "minLength": 1}, "authority_role": {"type": "string", "minLength": 1}, "decided_at": {"type": "integer", "minimum": 0}, "tradeoff_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+    }},
+    "observation": {"type": "object", "additionalProperties": false, "required": ["criterion_id", "metric", "unit", "value", "observed_at", "expires_at", "evidence_digest", "environment_id"], "properties": {
+      "criterion_id": {"type": "string", "minLength": 1}, "metric": {"type": "string", "minLength": 1}, "unit": {"type": "string", "minLength": 1}, "value": {"type": "number"}, "observed_at": {"type": "integer", "minimum": 0}, "expires_at": {"type": "integer", "minimum": 0}, "evidence_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "environment_id": {"type": "string", "minLength": 1}
+    }},
+    "tradeoff": {"type": "object", "additionalProperties": false, "required": ["id", "criterion_ids", "decision", "rationale", "authority", "decided_at", "review_by"], "properties": {
+      "id": {"type": "string", "minLength": 1}, "criterion_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true}, "decision": {"type": "string", "minLength": 1}, "rationale": {"type": "string", "minLength": 1}, "authority": {"type": "string", "minLength": 1}, "decided_at": {"type": "integer", "minimum": 0}, "review_by": {"type": "integer", "minimum": 0}
+    }}
+  }
+}

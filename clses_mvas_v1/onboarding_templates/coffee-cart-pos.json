@@ -1,0 +1,20 @@
+{
+  "format": "CLSES-onboarding-template/v1", "id": "coffee-cart-pos", "version": "1.0.0",
+  "title": "Coffee cart point of sale", "description": "Start a mobile coffee-cart checkout system with payment, offline, quality, and UX assurance.",
+  "profile": "point-of-sale", "starter_facts": {"system_class": "point-of-sale"},
+  "inputs": [
+    {"fact_id": "system_name", "label": "System name", "help": "A short name people will recognize.", "value_type": "string", "required": true},
+    {"fact_id": "problem", "label": "Problem to solve", "help": "Describe the current customer or operator problem.", "value_type": "string", "required": true},
+    {"fact_id": "beneficiaries", "label": "Who benefits", "help": "List the people intended to benefit.", "value_type": "string_list", "required": true},
+    {"fact_id": "outcome_statement", "label": "Desired outcome", "help": "State the observable improvement sought.", "value_type": "string", "required": true},
+    {"fact_id": "outcome_metric", "label": "Outcome metric", "help": "Name the measurement used to judge the outcome.", "value_type": "string", "required": true},
+    {"fact_id": "outcome_unit", "label": "Metric unit", "help": "Name the metric unit.", "value_type": "string", "required": true},
+    {"fact_id": "outcome_operator", "label": "Target comparison", "help": "Use >=, >, <=, <, or ==.", "value_type": "string", "required": true},
+    {"fact_id": "outcome_target", "label": "Target", "help": "Set the human-approved outcome target.", "value_type": "number", "required": true},
+    {"fact_id": "outcome_baseline", "label": "Current baseline", "help": "Record the current measured baseline.", "value_type": "number", "required": true},
+    {"fact_id": "data_classes", "label": "Data handled", "help": "List payment, personal, and operational data classes.", "value_type": "string_list", "required": true},
+    {"fact_id": "compliance_obligations", "label": "External obligations", "help": "List payment-provider, legal, and contractual obligations.", "value_type": "string_list", "required": true},
+    {"fact_id": "operating_conditions", "label": "Operating conditions", "help": "Describe devices, connectivity, locations, load, and support hours.", "value_type": "object", "required": true},
+    {"fact_id": "authorities", "label": "Human authorities", "help": "Assign a person to every required authority role.", "value_type": "object", "required": true}
+  ]
+}

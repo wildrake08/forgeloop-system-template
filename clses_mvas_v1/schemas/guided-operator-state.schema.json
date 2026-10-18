@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v4.2/guided-operator-state.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "journey_id", "profile", "intake", "authorization_packet_ids", "created_at", "updated_at", "state_digest"],
+  "properties": {
+    "format": {"const": "CLSES-guided-operator/v1"},
+    "journey_id": {"type": "string", "minLength": 1},
+    "profile": {"type": "string", "minLength": 1},
+    "intake": {"type": "object"},
+    "authorization_packet_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "created_at": {"type": "integer", "minimum": 0},
+    "updated_at": {"type": "integer", "minimum": 0},
+    "state_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

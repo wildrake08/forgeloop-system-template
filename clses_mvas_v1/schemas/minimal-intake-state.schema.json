@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.org/clses/v4.1/minimal-intake-state.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "session_id", "profile", "profile_dir", "required_facts", "fact_policy_digest", "facts", "assumptions", "conflicts", "pending_questions", "asked_question_ids", "deferred", "baseline", "status", "updated_at", "state_digest"],
+  "properties": {
+    "format": {"const": "CLSES-minimal-intake/v1"}, "session_id": {"type": "string", "minLength": 1}, "profile": {"type": "object"}, "profile_dir": {"type": "string", "minLength": 1},
+    "required_facts": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "fact_policy_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "facts": {"type": "object"}, "assumptions": {"type": "object"}, "conflicts": {"type": "object"}, "pending_questions": {"type": "array"},
+    "asked_question_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "deferred": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "baseline": {"anyOf": [{"type": "null"}, {"type": "object"}]}, "change_log": {"type": "array"}, "status": {"enum": ["new", "awaiting_minimum_required_facts", "ready_for_consolidated_human_review"]},
+    "updated_at": {"type": "integer", "minimum": 0}, "state_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

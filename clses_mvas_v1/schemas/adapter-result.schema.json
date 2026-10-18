@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.org/clses/v3/adapter-result.schema.json",
+  "type": "object", "additionalProperties": false, "required": ["format", "request_id", "adapter_id", "adapter_digest", "evidence_type", "passed", "measurements", "raw_evidence_sha256", "observed_at", "expires_at"],
+  "properties": {"format": {"const": "CLSES-adapter-result/v1"}, "request_id": {"type": "string", "minLength": 1}, "adapter_id": {"type": "string", "minLength": 1}, "adapter_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "evidence_type": {"type": "string", "minLength": 1}, "passed": {"const": true}, "measurements": {"type": "object", "minProperties": 1}, "raw_evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "observed_at": {"type": "integer", "minimum": 0}, "expires_at": {"type": "integer", "minimum": 0}}
+}

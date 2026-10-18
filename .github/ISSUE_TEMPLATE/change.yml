@@ -1,0 +1,29 @@
+name: Governed change
+description: Propose a traced software-system change without implying authorization.
+title: "change: "
+labels: ["change-proposal"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Need and intended outcome
+    validations:
+      required: true
+  - type: textarea
+    id: beneficiaries
+    attributes:
+      label: Beneficiaries and affected parties
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Measurable acceptance conditions
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks, harms, and operating-condition changes
+    validations:
+      required: true

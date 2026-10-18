@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CLSES Operator</title><link rel="stylesheet" href="/app.css"></head>
+<body data-csrf="@@CSRF@@">
+  <header><div><p class="eyebrow">CLSES lifecycle operator</p><h1>Build and operate with evidence</h1></div><button id="refresh">Refresh status</button></header>
+  <main>
+    <section class="hero"><div><span id="step" class="pill">Loading</span><h2 id="headline">Reading lifecycle status…</h2><p id="notice"></p></div><div id="progress" class="progress"></div></section>
+    <section class="grid">
+      <article><h3>1. Discover</h3><p>Inspect this repository locally. Secret values and external services are never read.</p><button id="discover">Discover environment</button><pre id="discovery">No discovery run yet.</pre></article>
+      <article><h3>2. Start from a template</h3><label for="template">Template</label><select id="template"></select><label for="answers">Your answers</label><textarea id="answers" rows="12" placeholder='{"system_name":"Coffee Cart POS", ...}'></textarea><label class="check"><input id="acceptDiscovery" type="checkbox"> Use the reviewed discovery suggestions</label><div class="actions"><button id="plan">Review plan</button><button id="apply" class="primary">Begin lifecycle</button></div><pre id="onboarding">Choose a template and provide its requested facts.</pre></article>
+      <article><h3>3. Current work</h3><p>The lifecycle view below is derived from authoritative state.</p><pre id="status"></pre><label>Requested intake answers</label><textarea id="intakeAnswers" rows="5" placeholder='{"fact_id":"answer"}'></textarea><button id="answerIntake">Save requested answers</button></article>
+      <article><h3>4. Human authority</h3><p>Open an authenticated session, prepare a review packet, then decide each exact challenge separately. Conversation and agent actions never authorize.</p><label>Principal</label><input id="principal" value="engineering-reviewer"><label>Credential</label><textarea id="credential" rows="3"></textarea><button id="session">Open session</button><button id="packet">Prepare current requests</button><label>Decision ID</label><input id="decisionId"><label>Exact confirmation</label><textarea id="confirmation" rows="3"></textarea><div class="actions"><button id="reject">Reject</button><button id="approve" class="primary">Approve exact item</button></div><pre id="authority">No authenticated session.</pre></article>
+      <article><h3>5. Agent execution</h3><p>Register an execution service, prepare a bounded mandate, and continue only after the required human decisions.</p><label>Driver name</label><input id="driverName" value="codex"><label>Driver kind</label><select id="driverKind"><option value="codex">Codex</option><option value="generic">Organization adapter</option></select><button id="driver">Register driver</button><label>Mandate</label><textarea id="mandate" rows="9" placeholder='{"run_id":"feature-1","objective":"...","driver":"codex","allowed_paths":["src/*","tests/*"],"requirements":["test_pass_rate"],"max_iterations":5,"max_changes":12,"max_bytes":50000,"expires_at":0}'></textarea><button id="mandateButton">Prepare mandate</button><label>Run ID</label><input id="runId"><button id="continueRun" class="primary">Continue authorized run</button><pre id="execution">No agent action prepared.</pre></article>
+      <article><h3>6. Production connections</h3><p>Preconfigured adapters accept only externally signed observations bound to the exact system, environment, artifact, and evidence request.</p><div id="adapters"></div></article>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body></html>

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.org/clses/v4.1/minimal-viable-baseline.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "system_id", "system_name", "system_class", "need", "purpose", "beneficiaries", "outcome_hypothesis", "data_classes", "compliance_obligations", "operating_conditions", "authorities", "profiles", "assumptions", "decision"],
+  "properties": {
+    "format": {"const": "CLSES-minimum-viable-baseline/v1"}, "system_id": {"type": "string", "minLength": 1}, "system_name": {"type": "string", "minLength": 1}, "system_class": {"type": "string", "minLength": 1},
+    "need": {"type": ["string", "null"]}, "purpose": {"type": ["string", "null"]}, "beneficiaries": {"type": "array"}, "outcome_hypothesis": {"type": ["object", "null"]},
+    "data_classes": {"type": "array"}, "compliance_obligations": {"type": "array"}, "operating_conditions": {"type": "object"}, "authorities": {"type": "object"}, "profiles": {"type": "array"}, "assumptions": {"type": "array"}, "decision": {"const": "proposed_not_authorized"}
+  }
+}

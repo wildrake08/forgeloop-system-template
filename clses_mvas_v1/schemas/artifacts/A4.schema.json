@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v0.3.1/A4.schema.json",
+  "title": "A4 Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "design_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["id", "version"]
+    },
+    "work_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "instruction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "work_state": {
+      "enum": [
+        "proposed",
+        "authorized",
+        "executing",
+        "executed",
+        "failed",
+        "withdrawn"
+      ]
+    },
+    "state_changed_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "assigned_actor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorization_ref": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "execution_evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ]
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "design_ref",
+    "work_id",
+    "instruction",
+    "work_state",
+    "state_changed_at",
+    "assigned_actor",
+    "authorization_ref",
+    "execution_evidence_refs"
+  ],
+  "allOf": [
+    {
+      "if": { "properties": { "work_state": { "enum": ["authorized", "executing", "executed", "failed"] } } },
+      "then": { "properties": { "authorization_ref": { "type": "object" } } }
+    },
+    {
+      "if": { "properties": { "work_state": { "const": "executed" } } },
+      "then": { "properties": { "execution_evidence_refs": { "minItems": 1 } } }
+    }
+  ]
+}

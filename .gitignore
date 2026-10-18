@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+.coverage
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+
+# Local authority credentials and mutable assurance state must never be committed.
+.clses-v1/
+*.key
+*.pem
+*.p12
+*.pfx
+credentials*.json
+secrets*.json

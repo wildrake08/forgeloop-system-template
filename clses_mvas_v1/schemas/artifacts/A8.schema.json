@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/clses/v0.3.1/A8.schema.json",
+  "title": "A8 Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "decision_kind": {
+      "enum": [
+        "purpose_authorization",
+        "engineering_authorization",
+        "production_authorization",
+        "finding",
+        "response",
+        "release",
+        "closure",
+        "risk_acceptance"
+        ,"revocation"
+      ]
+    },
+    "actor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorized_actor": {
+      "anyOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "null" }
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "enum": [
+        "proposed",
+        "approved",
+        "denied",
+        "failed",
+        "closed_verified",
+        "closed_exception",
+        "open"
+        ,"revoked"
+      ]
+    },
+    "decided_at": {
+      "type": "integer"
+    },
+    "basis_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ]
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "target_ref": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authority_source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "valid_until": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "decision_kind",
+    "actor",
+    "authorized_actor",
+    "scope",
+    "decision",
+    "decided_at",
+    "basis_refs",
+    "target_ref",
+    "authority_source",
+    "valid_until"
+  ],
+  "allOf": [
+    {
+      "if": { "properties": { "decision_kind": { "const": "engineering_authorization" } } },
+      "then": { "properties": { "authorized_actor": { "type": "string" } } }
+    },
+    {
+      "if": { "properties": { "decision_kind": { "const": "finding" } } },
+      "then": { "properties": { "decision": { "const": "open" }, "target_ref": { "type": "object" } } }
+    },
+    {
+      "if": { "properties": { "decision_kind": { "const": "closure" } } },
+      "then": {
+        "properties": {
+          "decision": { "enum": ["closed_verified", "closed_exception"] },
+          "target_ref": { "type": "object" },
+          "basis_refs": { "minItems": 1 }
+        }
+      }
+    }
+  ]
+}

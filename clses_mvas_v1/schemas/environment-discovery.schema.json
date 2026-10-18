@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://example.org/clses/v4.5/environment-discovery.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "source_root", "observed_at", "evidence", "runtimes", "environment_key_presence", "suggested_facts", "warnings", "status", "report_digest"],
+  "properties": {
+    "format": {"const": "CLSES-environment-discovery/v1"}, "source_root": {"type": "string", "minLength": 1}, "observed_at": {"type": "integer", "minimum": 0},
+    "evidence": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["path", "kind", "sha256"], "properties": {"path": {"type": "string"}, "kind": {"enum": ["file", "directory"]}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}},
+    "runtimes": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["name", "available"], "properties": {"name": {"type": "string"}, "available": {"type": "boolean"}}}},
+    "environment_key_presence": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["name", "present"], "properties": {"name": {"type": "string"}, "present": {"type": "boolean"}}}},
+    "suggested_facts": {"type": "object", "additionalProperties": false, "required": ["system_name", "system_class", "operating_conditions"], "properties": {"system_name": {"type": "string"}, "system_class": {"type": "string"}, "operating_conditions": {"type": "object"}}},
+    "warnings": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "status": {"const": "proposed_not_authorized"}, "report_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

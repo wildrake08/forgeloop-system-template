@@ -1,0 +1,2 @@
+# First-run bootstrap replaces this file with the verified @user or @organization/team supplied by the operator.
+# Do not treat CODEOWNERS absence as authorization; CLSES exact-scope decisions remain authoritative.
